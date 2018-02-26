@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/vahriin/BigGraph/xmlpars"
+	"github.com/vahriin/BigGraph/xml"
 )
 
 func main() {
 	start := time.Now()
-	doc := xmlpars.XMLRead("/home/vahriin/Downloads/map")
+	doc := xml.XMLRead("/home/vahriin/Downloads/map")
 	graph := doc.Graph()
 	fmt.Println(len(graph.Edges))
 	fmt.Println(graph.Edges[55])
