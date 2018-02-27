@@ -1,4 +1,4 @@
-package xmlpars
+package xmlparse
 
 type Tag struct {
 	Key string `xml:"k,attr"`
@@ -14,6 +14,14 @@ type Coordinates struct {
 	Lon float64 `xml:"lon,attr"`
 }
 
+func (c Coordinates) Xint() uint {
+	return uint(c.Lon * 1000000)
+}
+
+func (c Coordinates) Yint() uint {
+	return uint(c.Lat * 1000000)
+}
+
 type Node struct {
 	Id uint `xml:"id,attr"`
 	Coordinates
@@ -24,10 +32,6 @@ type Bounds struct {
 	Maxlat float64 `xml:"maxlat,attr"`
 	Minlon float64 `xml:"minlon,attr"`
 	Maxlon float64 `xml:"maxlon,attr"`
-}
-
-type Edge struct {
-	Nodes []Node
 }
 
 

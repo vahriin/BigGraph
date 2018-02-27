@@ -1,4 +1,4 @@
-package xmlpars
+package xmlparse
 
 
 type Way struct {

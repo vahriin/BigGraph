@@ -1,4 +1,4 @@
-package xmlpars
+package xmlparse
 
 type Meta struct {
 	Bounds Bounds `xml:"bounds"`
