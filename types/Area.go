@@ -1,4 +1,4 @@
-package xmlparse
+package types
 
 type Edge struct {
 	Nodes []Node

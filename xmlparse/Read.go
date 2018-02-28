@@ -3,15 +3,17 @@ package xmlparse
 import (
 	"encoding/xml"
 	"io/ioutil"
+
+	"github.com/vahriin/BigGraph/types"
 )
 
-func XMLRead(filename string) Meta {
+func XMLRead(filename string) types.Meta {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	var document Meta
+	var document types.Meta
 
 	err = xml.Unmarshal(file, &document)
 	if err != nil {

@@ -19,6 +19,8 @@ func SVGImage(area xmlparse.Area) {
 
 	file := svg.NewSVG("output", widht, height)
 
+	defer file.Close()
+
 	badcounter := 0
 
 	for _, way := range area.Edges {
@@ -30,8 +32,6 @@ func SVGImage(area xmlparse.Area) {
 			}
 		}
 	}
-
-	file.Close()
 
 	fmt.Println(badcounter)
 }
