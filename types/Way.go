@@ -1,8 +1,7 @@
 package types
 
-
 type Way struct {
-	Refs []Nd `xml:"nd"`
+	Refs []Nd  `xml:"nd"`
 	Tags []Tag `xml:"tag"`
 }
 
@@ -15,8 +14,8 @@ func (way Way) IsHighway() bool {
 	return false
 }
 
-func (way Way) NodesId() []uint {
-	nodesId := make([]uint, 0, 10)
+func (way Way) NodesId() []uint64 {
+	nodesId := make([]uint64, 0, 10)
 
 	for _, ref := range way.Refs {
 		nodesId = append(nodesId, ref.Ref)

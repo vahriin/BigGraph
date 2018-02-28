@@ -1,14 +1,23 @@
 package types
 
-type Coordinates struct {
+type EarthCoords struct {
 	Lat float64 `xml:"lat,attr"`
 	Lon float64 `xml:"lon,attr"`
 }
 
-func (c Coordinates) Xint() uint {
-	return uint(c.Lon * 1000000)
+func (c EarthCoords) IntLon() uint64 {
+	return uint64(c.Lon * Multiplier)
 }
 
-func (c Coordinates) Yint() uint {
-	return uint(c.Lat * 1000000)
+func (c EarthCoords) IntLat() uint64 {
+	return uint64(c.Lat * Multiplier)
+}
+
+func (c EarthCoords) EuclidCoords() EuclidCoords {
+
+}
+
+type EuclidCoords struct {
+	X uint64
+	Y uint64
 }
