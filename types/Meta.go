@@ -2,16 +2,16 @@ package types
 
 type Meta struct {
 	Bounds Bounds `xml:"bounds"`
-	Nodes []Node `xml:"node"`
-	Ways []Way `xml:"way"`
+	Nodes  []Node `xml:"node"`
+	Ways   []Way  `xml:"way"`
 }
 
-func (meta Meta) search(id uint) (Node, bool) {
-	var left uint = 0
-	var right = uint(len(meta.Nodes)) - 1
+func (meta Meta) search(id uint64) (Node, bool) {
+	var left uint64 = 0
+	var right = uint64(len(meta.Nodes)) - 1
 
 	for meta.Nodes[left].Id < id && id < meta.Nodes[right].Id {
-		mid := left + (id - meta.Nodes[left].Id) * (right - left) / (meta.Nodes[right].Id - meta.Nodes[left].Id)
+		mid := left + (id-meta.Nodes[left].Id)*(right-left)/(meta.Nodes[right].Id-meta.Nodes[left].Id)
 		if meta.Nodes[mid].Id < id {
 			left = mid + 1
 		} else if meta.Nodes[mid].Id > id {

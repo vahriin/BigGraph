@@ -1,37 +1,39 @@
 package graph
 
 import (
-	"fmt"
+	"log"
+	"os"
 
 	"github.com/vahriin/BigGraph/svg"
-	"github.com/vahriin/BigGraph/xmlparse"
+	"github.com/vahriin/BigGraph/types"
 )
 
-func SVGImage(area xmlparse.Area) {
-	ymin := uint(area.Border.Minlat * 1000000)
-	ymax := uint(area.Border.Maxlat * 1000000)
-	xmax := uint(area.Border.Maxlon * 1000000)
-	xmin := uint(area.Border.Minlon * 1000000)
-	widht := ymax - ymin
-	height := xmax - xmin
+func SVGImage(area types.Area, filename string) {
+	file, _ := os.Create("logger")
+	log.SetOutput(file)
 
-	fmt.Println(widht, height)
-
-	file := svg.NewSVG("output", widht, height)
-
-	defer file.Close()
-
-	badcounter := 0
-
-	for _, way := range area.Edges {
-		for i, node := range way.Nodes {
-			file.Circle(node.Xint() - xmin, ymax - node.Yint(), 50)
-			if i != len(way.Nodes) - 1 {
-				file.Line(way.Nodes[i].Xint() - xmin, ymax - way.Nodes[i].Yint(),
-					way.Nodes[i+1].Xint() - xmin, ymax - way.Nodes[i+1].Yint())
-			}
-		}
+	file, err := os.Create(filename)
+	if err != nil {
+		panic(err)
 	}
 
-	fmt.Println(badcounter)
+	svgImage := svg.NewSVG(file)
+
+	defer svgImage.Close()
+
+	rectMin := area.Border.Mins()
+	rectMax := area.Border.Maxs()
+
+	for _, way := range area.Edges {
+		polyline := make([]types.EuclidCoords, 0, len(way.Nodes))
+		for _, node := range way.Nodes {
+			nodeEC := node.EuclidCoords()
+			nodeEC.X -= rectMin.X
+			nodeEC.Y = rectMax.Y - nodeEC.Y
+
+			polyline = append(polyline, nodeEC)
+			svgImage.Circle(nodeEC, 2)
+		}
+		svgImage.Polyline(polyline, 1)
+	}
 }

@@ -58,9 +58,9 @@ func (csv CSV) NLLine(node *types.Node) {
 	csv.Buffer.WriteString(strconv.FormatFloat(node.Lon, 'f', -1, 64))
 	csv.comma()
 	ec := node.EuclidCoords()
-	csv.Buffer.WriteString(strconv.FormatUint(ec.X, 10))
+	csv.Buffer.WriteString(strconv.FormatFloat(ec.X, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatUint(ec.Y, 10))
+	csv.Buffer.WriteString(strconv.FormatFloat(ec.Y, 'f', -1, 64))
 }
 
 func (csv CSV) comma() {

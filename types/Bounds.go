@@ -8,9 +8,9 @@ type Bounds struct {
 }
 
 func (b Bounds) Maxs() EuclidCoords {
-
+	return EarthCoords{Lon: b.Maxlon, Lat: b.Maxlat}.EuclidCoords()
 }
 
 func (b Bounds) Mins() EuclidCoords {
-
+	return EarthCoords{Lon: b.Minlon, Lat: b.Minlat}.EuclidCoords()
 }

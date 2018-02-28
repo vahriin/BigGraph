@@ -8,7 +8,12 @@ type Way struct {
 func (way Way) IsHighway() bool {
 	for _, tag := range way.Tags {
 		if tag.Key == "highway" {
-			return true
+			if tag.Value == "footway" || tag.Value == "cycleway" || tag.Value == "bridleway" ||
+				tag.Value == "living_street" || tag.Value == "pedestrian" || tag.Value == "steps" {
+				return false
+			} else {
+				return true
+			}
 		}
 	}
 	return false
