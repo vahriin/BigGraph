@@ -1,11 +1,11 @@
 package types
 
 type Edge struct {
-	Nodes []Node
+	NodesId []uint64
 }
 
 type Area struct {
 	Border Bounds
-	Edges []Edge
+	Edges  []Edge
+	Points map[uint64]GeneralCoords
 }
-

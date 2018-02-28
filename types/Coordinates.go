@@ -1,7 +1,6 @@
 package types
 
 import (
-	"log"
 	"math"
 )
 
@@ -25,14 +24,15 @@ func (c EarthCoords) EuclidCoords() EuclidCoords {
 	ec.X *= multiplier
 	ec.Y *= multiplier
 
-	log.Println(c.Lon, "->", lonRad, "->", ec.X)
-	log.Println(c.Lat, "->", latRad, "->", ec.Y)
-	log.Println()
-
 	return ec
 }
 
 type EuclidCoords struct {
 	X float64
 	Y float64
+}
+
+type GeneralCoords struct {
+	Euclid EuclidCoords
+	Earth  EarthCoords
 }

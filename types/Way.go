@@ -19,11 +19,12 @@ func (way Way) IsHighway() bool {
 	return false
 }
 
-func (way Way) NodesId() []uint64 {
-	nodesId := make([]uint64, 0, 10)
+func (way Way) Edge() Edge {
+	var edge Edge
+	edge.NodesId = make([]uint64, 0, len(way.Refs))
 
 	for _, ref := range way.Refs {
-		nodesId = append(nodesId, ref.Ref)
+		edge.NodesId = append(edge.NodesId, ref.Ref)
 	}
-	return nodesId
+	return edge
 }

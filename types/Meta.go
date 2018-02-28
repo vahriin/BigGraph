@@ -1,5 +1,7 @@
 package types
 
+import "strconv"
+
 type Meta struct {
 	Bounds Bounds `xml:"bounds"`
 	Nodes  []Node `xml:"node"`
@@ -31,22 +33,29 @@ func (meta Meta) search(id uint64) (Node, bool) {
 }
 
 func (meta Meta) Graph() Area {
+	rectMin := meta.Bounds.Mins()
+	rectMax := meta.Bounds.Maxs()
+
 	var area Area
-	area.Border = meta.Bounds
+	area.Edges = make([]Edge, 0, 15000)
+	area.Points = make(map[uint64]GeneralCoords)
 
 	for _, way := range meta.Ways {
 		if way.IsHighway() {
-			var edge Edge
+			edge := way.Edge()
+			for _, id := range edge.NodesId {
+				if _, ok := area.Points[id]; !ok {
+					if node, ok1 := meta.search(id); ok1 {
+						nodeEC := node.EuclidCoords()
+						nodeEC.X -= rectMin.X
+						nodeEC.Y = rectMax.Y - nodeEC.Y
 
-			nodesId := way.NodesId()
-
-			edge.Nodes = make([]Node, 0, len(nodesId))
-			for _, id := range nodesId {
-				if node, ok := meta.search(id); ok {
-					edge.Nodes = append(edge.Nodes, node)
+						area.Points[id] = GeneralCoords{Earth: node.EarthCoords, Euclid: nodeEC}
+					} else {
+						panic("No nodes with id: " + strconv.FormatUint(id, 10))
+					}
 				}
 			}
-
 			area.Edges = append(area.Edges, edge)
 		}
 	}

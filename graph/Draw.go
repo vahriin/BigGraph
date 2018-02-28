@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"log"
 	"os"
 
 	"github.com/vahriin/BigGraph/svg"
@@ -9,9 +8,6 @@ import (
 )
 
 func SVGImage(area types.Area, filename string) {
-	file, _ := os.Create("logger")
-	log.SetOutput(file)
-
 	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)
@@ -21,19 +17,15 @@ func SVGImage(area types.Area, filename string) {
 
 	defer svgImage.Close()
 
-	rectMin := area.Border.Mins()
-	rectMax := area.Border.Maxs()
-
 	for _, way := range area.Edges {
-		polyline := make([]types.EuclidCoords, 0, len(way.Nodes))
-		for _, node := range way.Nodes {
-			nodeEC := node.EuclidCoords()
-			nodeEC.X -= rectMin.X
-			nodeEC.Y = rectMax.Y - nodeEC.Y
-
-			polyline = append(polyline, nodeEC)
-			svgImage.Circle(nodeEC, 2)
+		polyline := make([]types.EuclidCoords, 0, len(way.NodesId))
+		for _, nodeId := range way.NodesId {
+			polyline = append(polyline, area.Points[nodeId].Euclid)
 		}
 		svgImage.Polyline(polyline, 1)
+	}
+
+	for _, coord := range area.Points {
+		svgImage.Circle(coord.Euclid, 1)
 	}
 }
