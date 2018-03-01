@@ -11,6 +11,7 @@ import (
 )
 
 func Flags() (filename string) {
+	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
 		return "map.osm"
@@ -33,7 +34,7 @@ func main() {
 	fmt.Println("File parsed. Time spent: ", time.Since(start))
 	fmt.Println("Generate output...")
 
-	os.Mkdir("output", 0666)
+	os.Mkdir("output", os.ModePerm)
 	graph.SVGImage(&area, "output/viz.svg")
 	graph.CSVNodeList(&area, "output/NL.csv")
 	graph.AdjList(&area, "output/AL.csv")
