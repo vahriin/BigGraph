@@ -35,9 +35,9 @@ func main() {
 	fmt.Println("Generate output...")
 
 	os.Mkdir("output", os.ModePerm)
-	graph.SVGImage(&area, "output/viz.svg")
-	graph.CSVNodeList(&area, "output/NL.csv")
-	graph.AdjList(&area, "output/AL.csv")
+	graph.SVGImage(&area, "output/road_graph.svg")
+	graph.CSVNodeList(&area, "output/nodes_list.csv")
+	graph.AdjList(&area, "output/adjacency_list.csv")
 
 	fmt.Println("Output generated. Time spent total: ", time.Since(start))
 	fmt.Println("Have a nice day!")
