@@ -1,19 +1,43 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/vahriin/BigGraph/graph"
 	"github.com/vahriin/BigGraph/xmlparse"
 )
 
+func Flags() (filename string) {
+	args := flag.Args()
+	if len(args) == 0 {
+		return "map.osm"
+	} else {
+		return args[0]
+	}
+}
+
 func main() {
+	mapsrc := Flags()
+
 	start := time.Now()
-	doc := xmlparse.XMLRead("/home/vahriin/Downloads/map")
-	startComp := time.Now()
+
+	fmt.Println("File parsing...")
+
+	doc := xmlparse.XMLRead(mapsrc)
 	area := doc.Graph()
-	graph.SVGImage(area, "output1.svg")
-	fmt.Println(time.Since(start))
-	fmt.Println(time.Since(startComp))
+	doc = nil
+
+	fmt.Println("File parsed. Time spent: ", time.Since(start))
+	fmt.Println("Generate output...")
+
+	os.Mkdir("output", 0666)
+	graph.SVGImage(&area, "output/viz.svg")
+	graph.CSVNodeList(&area, "output/NL.csv")
+	graph.AdjList(&area, "output/AL.csv")
+
+	fmt.Println("Output generated. Time spent total: ", time.Since(start))
+	fmt.Println("Have a nice day!")
 }

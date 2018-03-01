@@ -7,13 +7,13 @@ import (
 	"github.com/vahriin/BigGraph/types"
 )
 
-func XMLRead(filename string) types.Meta {
+func XMLRead(filename string) *types.Meta {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	var document types.Meta
+	document := new(types.Meta)
 
 	err = xml.Unmarshal(file, &document)
 	if err != nil {
@@ -22,5 +22,3 @@ func XMLRead(filename string) types.Meta {
 
 	return document
 }
-
-

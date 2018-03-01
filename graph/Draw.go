@@ -7,7 +7,7 @@ import (
 	"github.com/vahriin/BigGraph/types"
 )
 
-func SVGImage(area types.Area, filename string) {
+func SVGImage(area *types.Area, filename string) {
 	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)

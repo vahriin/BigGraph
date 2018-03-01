@@ -40,6 +40,16 @@ func (csv CSV) ALLine(root uint64, children []uint64) {
 	csv.Buffer.WriteRune('\n')
 }
 
+func (csv CSV) AMHeader(header []uint64) {
+	for i, dist := range header {
+		csv.Buffer.WriteString(strconv.FormatUint(dist, 10))
+		if i != len(header)-1 {
+			csv.comma()
+		}
+	}
+	csv.Buffer.WriteRune('\n')
+}
+
 func (csv CSV) AMLine(distances []float64) {
 	for i, dist := range distances {
 		csv.Buffer.WriteString(strconv.FormatFloat(dist, 'f', -1, 64))
@@ -50,17 +60,17 @@ func (csv CSV) AMLine(distances []float64) {
 	csv.Buffer.WriteRune('\n')
 }
 
-func (csv CSV) NLLine(node *types.Node) {
-	csv.Buffer.WriteString(strconv.FormatUint(node.Id, 10))
+func (csv CSV) NLLine(id uint64, coord *types.GeneralCoords) {
+	csv.Buffer.WriteString(strconv.FormatUint(id, 10))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(node.Lat, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coord.Earth.Lat, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(node.Lon, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coord.Earth.Lon, 'f', -1, 64))
 	csv.comma()
-	ec := node.EuclidCoords()
-	csv.Buffer.WriteString(strconv.FormatFloat(ec.X, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coord.Euclid.X, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(ec.Y, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coord.Euclid.Y, 'f', -1, 64))
+	csv.Buffer.WriteRune('\n')
 }
 
 func (csv CSV) comma() {
