@@ -23,14 +23,12 @@ func AdjList(area *types.Area, filename string) {
 		al[id] = make([]uint64, 0, 4)
 	}
 
-	//AdjMatrix(area, al, "AM.csv")
-
-	for _, edge := range area.Edges {
-		for i := 1; i < len(edge.NodesId); i++ {
-			al[edge.NodesId[i]] = append(al[edge.NodesId[i]], edge.NodesId[i-1])
+	for _, edge := range area.Highways {
+		for i := 1; i < len(edge.NodesID); i++ {
+			al[edge.NodesID[i]] = append(al[edge.NodesID[i]], edge.NodesID[i-1])
 		}
-		for i := 0; i < len(edge.NodesId)-1; i++ {
-			al[edge.NodesId[i]] = append(al[edge.NodesId[i]], edge.NodesId[i+1])
+		for i := 0; i < len(edge.NodesID)-1; i++ {
+			al[edge.NodesID[i]] = append(al[edge.NodesID[i]], edge.NodesID[i+1])
 		}
 	}
 

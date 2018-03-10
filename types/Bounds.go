@@ -1,5 +1,6 @@
 package types
 
+// Bounds is container for latitude and longitude of angles of rectangle area
 type Bounds struct {
 	Minlat float64 `xml:"minlat,attr"`
 	Maxlat float64 `xml:"maxlat,attr"`
@@ -7,10 +8,12 @@ type Bounds struct {
 	Maxlon float64 `xml:"maxlon,attr"`
 }
 
+// Maxs returns EuclidCoords of area's top right corner
 func (b Bounds) Maxs() EuclidCoords {
-	return EarthCoords{Lon: b.Maxlon, Lat: b.Maxlat}.EuclidCoords()
+	return GeographicCoords{Lon: b.Maxlon, Lat: b.Maxlat}.EuclidCoords()
 }
 
+// Mins returns EuclidCoords of area's lower left corner
 func (b Bounds) Mins() EuclidCoords {
-	return EarthCoords{Lon: b.Minlon, Lat: b.Minlat}.EuclidCoords()
+	return GeographicCoords{Lon: b.Minlon, Lat: b.Minlat}.EuclidCoords()
 }

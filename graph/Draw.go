@@ -17,9 +17,9 @@ func SVGImage(area *types.Area, filename string) {
 
 	defer svgImage.Close()
 
-	for _, way := range area.Edges {
-		polyline := make([]types.EuclidCoords, 0, len(way.NodesId))
-		for _, nodeId := range way.NodesId {
+	for _, way := range area.Highways {
+		polyline := make([]types.EuclidCoords, 0, len(way.NodesID))
+		for _, nodeId := range way.NodesID {
 			polyline = append(polyline, area.Points[nodeId].Euclid)
 		}
 		svgImage.Polyline(polyline, 1)
