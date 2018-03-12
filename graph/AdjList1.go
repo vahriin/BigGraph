@@ -1,6 +1,6 @@
 package graph
 
-import (
+/*import (
 	"os"
 
 	"github.com/vahriin/BigGraph/csv"
@@ -35,4 +35,4 @@ func AdjList(area *types.Area, filename string) {
 	for id, nodes := range al {
 		csvAL.ALLine(id, nodes)
 	}
-}
+}*/

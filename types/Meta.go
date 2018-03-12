@@ -8,7 +8,7 @@ type Meta struct {
 }
 
 // search use the Interpolation search
-func (meta Meta) search(id uint64) (Node) {
+func (meta Meta) search(id uint64) Node {
 	var left uint64
 	var right = uint64(len(meta.Nodes)) - 1
 
