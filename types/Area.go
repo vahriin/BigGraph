@@ -1,10 +1,5 @@
 package types
 
-// Highway is a road for car driving
-type Highway struct {
-	NodesID []uint64
-}
-
 // Area is main data structure contains the highway's node point and their coordinate
 type Area struct {
 	Highways []Highway

@@ -19,6 +19,19 @@ func (way Way) IsHighway() bool {
 	return false
 }
 
+func (way Way) IncidentNodes(nodeIndex int) []uint64 {
+	incNodes := make([]uint64, 4)
+
+	if nodeIndex - 1 >= 0 {
+		incNodes = append(incNodes, way.Refs[nodeIndex - 1].Ref)
+	} 
+
+	if nodeIndex + 1 < len(way.Refs) {
+		incNodes = append(incNodes, way.Refs[nodeIndex + 1].Ref)
+	}
+	return incNodes
+}
+
 // Edge return array of Node's Id of this way
 func (way Way) Edge() Highway {
 	var edge Highway

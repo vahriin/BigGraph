@@ -1,7 +1,5 @@
 package types
 
-import "strconv"
-
 // Meta is type contains all required information from parsed file
 type Meta struct {
 	Bounds Bounds `xml:"bounds"`
@@ -10,7 +8,7 @@ type Meta struct {
 }
 
 // search use the Interpolation search
-func (meta Meta) search(id uint64) (Node, bool) {
+func (meta Meta) search(id uint64) (Node) {
 	var left uint64
 	var right = uint64(len(meta.Nodes)) - 1
 
@@ -21,25 +19,55 @@ func (meta Meta) search(id uint64) (Node, bool) {
 		} else if meta.Nodes[mid].ID > id {
 			right = mid - 1
 		} else {
-			return meta.Nodes[mid], true
+			return meta.Nodes[mid]
 		}
 	}
 
 	if meta.Nodes[left].ID == id {
-		return meta.Nodes[left], true
+		return meta.Nodes[left]
 	} else if meta.Nodes[right].ID == id {
-		return meta.Nodes[right], true
+		return meta.Nodes[right]
 	} else {
-		return Node{}, false
+		return Node{}
 	}
 }
 
-// Graph build the highways graph from Meta data
-func (meta Meta) Graph() Area {
+/*func (meta Meta) Highways() []Highway {
+
+}*/
+
+// AdjList build the highways graph from Meta data
+func (meta Meta) AdjList() AdjList {
 	rectMin := meta.Bounds.Mins()
 	rectMax := meta.Bounds.Maxs()
 
-	var area Area
+	var al AdjList
+	al.AL = make(map[uint64][]uint64)
+	al.Nodes = make(map[uint64]GeneralCoords)
+
+	for _, way := range meta.Ways {
+		if way.IsHighway() {
+			for i, nd := range way.Refs {
+				if _, ok := al.AL[nd.Ref]; !ok {
+					al.AL[nd.Ref] = way.IncidentNodes(i)
+
+					node := meta.search(nd.Ref)
+					nodeEC := node.EuclidCoords()
+
+					nodeEC.X -= rectMin.X
+					nodeEC.Y = rectMax.Y - nodeEC.Y
+
+					al.Nodes[nd.Ref] = GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
+				} else {
+					al.AL[nd.Ref] = append(al.AL[nd.Ref], way.IncidentNodes(i)...)
+				}
+			}
+		}
+	}
+
+	return al
+
+	/*var area Area
 	area.Highways = make([]Highway, 0, 15000)
 	area.Points = make(map[uint64]GeneralCoords)
 
@@ -63,5 +91,5 @@ func (meta Meta) Graph() Area {
 			area.Highways = append(area.Highways, edge)
 		}
 	}
-	return area
+	return area*/
 }

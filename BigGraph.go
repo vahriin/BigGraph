@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("File parsing...")
 
 	doc := xmlparse.XMLRead(mapsrc)
-	area := doc.Graph()
+	area := doc.AdjList()
 	doc = nil
 
 	fmt.Println("File parsed. Time spent: ", time.Since(start))
