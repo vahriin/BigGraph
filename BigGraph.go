@@ -37,8 +37,8 @@ func main() {
 	doc = nil
 	fmt.Println("File parsed. Time spent: ", time.Since(start), "\n")
 
-	//fmt.Println("Delete excess points...")
-	//fmt.Println(adjList.DropExcessPoints(), " excess points deleted. Time spent: ", time.Since(start), "\n")
+	fmt.Println("Delete excess points...")
+	fmt.Println(adjList.DropExcessPoints(), " excess points deleted. Time spent: ", time.Since(start), "\n")
 
 	fmt.Println("Generate output...")
 
