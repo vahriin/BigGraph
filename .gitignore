@@ -12,3 +12,11 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+
+# IDE files
+.idea/
+.vscode/
+
+# Bad files
+bad/
+output/

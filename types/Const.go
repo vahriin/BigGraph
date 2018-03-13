@@ -1,3 +1,7 @@
 package types
 
-const Multiplier = 1000000
+// Multiplier is multiplier to increase the size of picture
+const Multiplier = 100
+
+// Radius is a radius of Earth sphere
+const Radius = 6378

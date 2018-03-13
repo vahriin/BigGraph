@@ -2,12 +2,14 @@ package graph
 
 import (
 	"os"
+	"sync"
 
 	"github.com/vahriin/BigGraph/csv"
 	"github.com/vahriin/BigGraph/types"
 )
 
-func CSVNodeList(area *types.Area, filename string) {
+// CSVNodeList write list of nodes to filename file
+func CSVNodeList(al types.AdjList, filename string, wg *sync.WaitGroup) {
 	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)
@@ -15,9 +17,12 @@ func CSVNodeList(area *types.Area, filename string) {
 
 	csvTable := csv.NewCSV(file)
 
-	defer csvTable.Close()
+	defer func() {
+		csvTable.Close()
+		wg.Done()
+	}()
 
-	for id, coords := range area.Points {
-		csvTable.NLLine(id, &coords)
+	for point, coords := range al.Nodes {
+		csvTable.NLLine(point, &coords)
 	}
 }

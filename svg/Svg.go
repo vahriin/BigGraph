@@ -19,8 +19,7 @@ func NewSVG(writer io.WriteCloser) SVG {
 	svg.writer = writer
 	svg.Buffer = bufio.NewWriter(writer)
 
-	header := `
-<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">`
+	header := `<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">`
 	svg.Buffer.WriteString(header)
 	svg.Buffer.WriteRune('\n')
 

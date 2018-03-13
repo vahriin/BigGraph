@@ -40,26 +40,6 @@ func (csv CSV) ALLine(root uint64, children []uint64) {
 	csv.Buffer.WriteRune('\n')
 }
 
-func (csv CSV) AMHeader(header []uint64) {
-	for i, dist := range header {
-		csv.Buffer.WriteString(strconv.FormatUint(dist, 10))
-		if i != len(header)-1 {
-			csv.comma()
-		}
-	}
-	csv.Buffer.WriteRune('\n')
-}
-
-func (csv CSV) AMLine(distances []float64) {
-	for i, dist := range distances {
-		csv.Buffer.WriteString(strconv.FormatFloat(dist, 'f', -1, 64))
-		if i != len(distances)-1 {
-			csv.comma()
-		}
-	}
-	csv.Buffer.WriteRune('\n')
-}
-
 func (csv CSV) NLLine(id uint64, coord *types.GeneralCoords) {
 	csv.Buffer.WriteString(strconv.FormatUint(id, 10))
 	csv.comma()
