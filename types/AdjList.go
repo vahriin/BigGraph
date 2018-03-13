@@ -1,9 +1,27 @@
 package types
 
-// AdjList is (TODO: Add doc)
+import (
+	"math"
+)
+
+// AdjList contains the AL - adjacency list like a map where key is point id and value is incident points id array
+// and Nodes - map of nodes, where key is point id
 type AdjList struct {
 	AL    map[uint64][]uint64
 	Nodes map[uint64]GeneralCoords
+}
+
+func (al AdjList) onLine(left, center, right uint64) bool {
+	areaOfTriangle := math.Abs(
+		// calc the area of triangle on those three points
+		(al.Nodes[left].Euclid.X-al.Nodes[right].Euclid.X)*(al.Nodes[center].Euclid.Y-al.Nodes[right].Euclid.Y)-
+			(al.Nodes[center].Euclid.X-al.Nodes[right].Euclid.X)*(al.Nodes[left].Euclid.Y-al.Nodes[right].Euclid.Y)) / 2
+
+	// if the area is negligible small then points are on the same straight line
+	if areaOfTriangle < 1E-1 {
+		return true
+	}
+	return false
 }
 
 // DropExcessPoints delete points that located on a straight line between two other points
@@ -15,9 +33,7 @@ func (al *AdjList) DropExcessPoints() int {
 		if len(incidentNodes) == 2 {
 			// sum of distances between current point and those incident to it should not be much greater than
 			// distance between two incident points of current point according to the rule of the triangle
-			if Distance(al.Nodes[incidentNodes[0]].Euclid, al.Nodes[point].Euclid)+
-				Distance(al.Nodes[incidentNodes[1]].Euclid, al.Nodes[point].Euclid)-
-				Distance(al.Nodes[incidentNodes[0]].Euclid, al.Nodes[incidentNodes[1]].Euclid) < 1E-3 {
+			if al.onLine(incidentNodes[0], point, incidentNodes[1]) {
 
 				al.AL[incidentNodes[0]][linearSearch(al.AL[incidentNodes[0]], point)] = incidentNodes[1]
 				al.AL[incidentNodes[1]][linearSearch(al.AL[incidentNodes[1]], point)] = incidentNodes[0]

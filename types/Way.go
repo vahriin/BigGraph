@@ -40,14 +40,3 @@ func (way Way) IncidentNodes(nodeIndex int) []uint64 {
 	}
 	return incNodes
 }
-
-// Edge return array of Node's Id of this way
-func (way Way) Edge() Highway {
-	var edge Highway
-	edge.NodesID = make([]uint64, 0, len(way.Refs))
-
-	for _, ref := range way.Refs {
-		edge.NodesID = append(edge.NodesID, ref.Ref)
-	}
-	return edge
-}
