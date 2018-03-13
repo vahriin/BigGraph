@@ -8,8 +8,8 @@ import (
 	"github.com/vahriin/BigGraph/types"
 )
 
-// CSVNodeList write list of nodes to filename file
-func CSVNodeList(al types.AdjList, filename string, wg *sync.WaitGroup) {
+// CSVAdjList write adjacency list to csv file with 'filename' name.
+func CSVAdjList(al types.AdjList, filename string, wg *sync.WaitGroup) {
 	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)
@@ -22,7 +22,7 @@ func CSVNodeList(al types.AdjList, filename string, wg *sync.WaitGroup) {
 		wg.Done()
 	}()
 
-	for point, coords := range al.Nodes {
-		csvTable.NLLine(point, &coords)
+	for node, incidentNodes := range al.AL {
+		csvTable.ALLine(node, incidentNodes)
 	}
 }

@@ -7,8 +7,8 @@ type Meta struct {
 	Ways   []Way  `xml:"way"`
 }
 
-// search use the Interpolation search
-func (meta Meta) search(id uint64) Node {
+// interpolationSearch use the Interpolation search
+func (meta Meta) interpolationSearch(id uint64) Node {
 	var left uint64
 	var right = uint64(len(meta.Nodes)) - 1
 
@@ -32,10 +32,6 @@ func (meta Meta) search(id uint64) Node {
 	}
 }
 
-/*func (meta Meta) Highways() []Highway {
-
-}*/
-
 // AdjList build the highways graph from Meta data
 func (meta Meta) AdjList() AdjList {
 	rectMin := meta.Bounds.Mins()
@@ -51,7 +47,8 @@ func (meta Meta) AdjList() AdjList {
 				if _, ok := al.AL[nd.Ref]; !ok {
 					al.AL[nd.Ref] = way.IncidentNodes(i)
 
-					node := meta.search(nd.Ref)
+					//TODO:
+					node := meta.interpolationSearch(nd.Ref)
 					nodeEC := node.EuclidCoords()
 
 					nodeEC.X -= rectMin.X

@@ -10,8 +10,16 @@ type Way struct {
 func (way Way) IsHighway() bool {
 	for _, tag := range way.Tags {
 		if tag.Key == "highway" {
-			if !(tag.Value == "footway" || tag.Value == "cycleway" || tag.Value == "bridleway" ||
-				tag.Value == "living_street" || tag.Value == "pedestrian" || tag.Value == "steps") {
+			if tag.Value == "motorway" || tag.Value == "motorway_link" ||
+				tag.Value == "trunk" || tag.Value == "trunk_link" ||
+				tag.Value == "primary" || tag.Value == "primary_link" ||
+				tag.Value == "secondary" || tag.Value == "secondary_link" ||
+				tag.Value == "tertiary" || tag.Value == "tertiary_link" ||
+				tag.Value == "unclassified" ||
+				tag.Value == "road" ||
+				//tag.Value == "service" ||
+				//tag.Value == "living_street" ||
+				tag.Value == "residential" {
 				return true
 			}
 		}
