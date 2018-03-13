@@ -47,10 +47,10 @@ func main() {
 	var oh sync.WaitGroup
 	oh.Add(2)
 
-	go graph.CSVNodeList(adjList, "output/NL.csv", &oh)
-	go graph.CSVAdjList(adjList, "output/AL.csv", &oh)
+	go graph.CSVNodeList(adjList, "output/nodes_list.csv", &oh)
+	go graph.CSVAdjList(adjList, "output/adjacency_list.csv", &oh)
 
-	graph.SVGImage(adjList, "output/viz.svg")
+	graph.SVGImage(adjList, "output/road_graph.svg")
 
 	oh.Wait()
 
