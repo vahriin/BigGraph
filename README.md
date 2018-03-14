@@ -26,8 +26,7 @@
 
 #### Готовый билд: 
 
-[Скачайте](https://drive.google.com/open?id=1mj60r5H1jAh25e9lxNeFRJisTr0LsyVW) готовый билд для Вашей OS
-
+[Скачайте](https://drive.google.com/drive/folders/1ciht0fpaZqSw5CZU6d4OGZOmX4sX21Y0?usp=sharing) готовый билд для Вашей OS. 
 #### Сборка из исходников:
 
 1. Установите [GO](https://golang.org/dl/)
@@ -36,7 +35,7 @@
 
 ## Использование
 
-[Скачайте](https://github.com/bruce-willis/City-Roads/blob/develop/docs/download.md) любым из указанных способов .osm файл с нужным участком карты. 
+[Скачайте](https://github.com/bruce-willis/City-Roads/blob/develop/docs/download.md) любым из указанных способов .osm файл с нужным участком карты, либо воспользуйтесь файлом map.osm с картой Уфы [отсюда](https://drive.google.com/drive/folders/1fmF_7uZ7E0nQZxs45UZ-zRysjp8GgUFY?usp=sharing).
 
 Запустите файл из командной строки, передав ему первым (и единственным!) параметром строку, представляющую собой путь до .osm файла, граф которого необходимо построить. Например: ```.\BigGraph_win64 path_to_your_file.osm```. Обратите внимание, что не требуется никаких ключей перед указанием пути до файла .osm
 
@@ -48,6 +47,10 @@
 1. ```road_graph.svg``` - файл с векторной визуализацией графа
 1. ```nodes_list.csv``` - таблица с используемыми нодами вида (id, Lat, Long, Euclid.X, Euclid.Y).
 1. ```adjacency_list.csv``` - таблица со списком смежности вида (id_root, id_child1, id_child2, ...)
+
+## Преподавателям
+
+[Здесь](https://drive.google.com/drive/folders/19SKaLppJJQON9KRjZtq7Lg-kAgfjzk2H?usp=sharing) лежит ```road_graph.svg``` (```road_graph.png```, если вы не хотите скачивать svg - предпросмотр этого формата у гугла работает некорректно) с построенной для Уфы картой и ```check.png``` изображением карты Уфы с openstreetmap. Масштаб немного разный, но основное сходство увидеть можно. Для более точной проверки рекомендую сравнивать road_graph.svg и карту с openstreetmap.
 
 ## Благодарности
 
