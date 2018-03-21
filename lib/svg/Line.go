@@ -13,19 +13,19 @@ type Line struct {
 	Color string
 }
 
-func (line Line) SVGWrite(s svg) {
-	s.Buffer.WriteString("<line x1=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(line.Begin.X, 'f', -1, 64))
-	s.Buffer.WriteString("\" x2=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(line.End.X, 'f', -1, 64))
-	s.Buffer.WriteString("\" y1=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(line.Begin.Y, 'f', -1, 64))
-	s.Buffer.WriteString("\" y2=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(line.End.Y, 'f', -1, 64))
-	s.Buffer.WriteString("\" stroke=\"")
-	s.Buffer.WriteString(line.Color)
-	s.Buffer.WriteString("\" stroke-width=\"")
-	s.Buffer.WriteString(strconv.FormatUint(uint64(line.Width), 10))
-	s.Buffer.WriteString("\"/>")
-	s.Buffer.WriteRune('\n')
+func (line Line) SVGWrite(f svg) {
+	f.Buffer.WriteString("<line x1=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(line.Begin.X, 'f', -1, 64))
+	f.Buffer.WriteString("\" x2=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(line.End.X, 'f', -1, 64))
+	f.Buffer.WriteString("\" y1=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(line.Begin.Y, 'f', -1, 64))
+	f.Buffer.WriteString("\" y2=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(line.End.Y, 'f', -1, 64))
+	f.Buffer.WriteString("\" stroke=\"")
+	f.Buffer.WriteString(line.Color)
+	f.Buffer.WriteString("\" stroke-width=\"")
+	f.Buffer.WriteString(strconv.FormatUint(uint64(line.Width), 10))
+	f.Buffer.WriteString("\"/>")
+	f.Buffer.WriteRune('\n')
 }

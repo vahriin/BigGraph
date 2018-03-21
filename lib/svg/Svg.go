@@ -11,21 +11,21 @@ type svg struct {
 }
 
 func newSVG(writer io.WriteCloser) svg {
-	var s svg
+	var f svg
 
-	s.writer = writer
-	s.Buffer = bufio.NewWriter(writer)
+	f.writer = writer
+	f.Buffer = bufio.NewWriter(writer)
 
 	header := `<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">`
-	s.Buffer.WriteString(header)
-	s.Buffer.WriteRune('\n')
+	f.Buffer.WriteString(header)
+	f.Buffer.WriteRune('\n')
 
-	return s
+	return f
 }
 
-func (s svg) close() {
+func (f svg) close() {
 	end := "</svg>\n"
-	s.Buffer.WriteString(end)
-	s.Buffer.Flush()
-	s.writer.Close()
+	f.Buffer.WriteString(end)
+	f.Buffer.Flush()
+	f.writer.Close()
 }

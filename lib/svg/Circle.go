@@ -12,15 +12,15 @@ type Circle struct {
 	Color  string
 }
 
-func (circle Circle) SVGWrite(s svg) {
-	s.Buffer.WriteString("<circle cx=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(circle.Center.X, 'f', -1, 64))
-	s.Buffer.WriteString("\" cy=\"")
-	s.Buffer.WriteString(strconv.FormatFloat(circle.Center.Y, 'f', -1, 64))
-	s.Buffer.WriteString("\" r=\"")
-	s.Buffer.WriteString(strconv.FormatUint(uint64(circle.Radius), 10))
-	s.Buffer.WriteString("\" fill=\"")
-	s.Buffer.WriteString(circle.Color)
-	s.Buffer.WriteString("\" />")
-	s.Buffer.WriteRune('\n')
+func (circle Circle) SVGWrite(f svg) {
+	f.Buffer.WriteString("<circle cx=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(circle.Center.X, 'f', -1, 64))
+	f.Buffer.WriteString("\" cy=\"")
+	f.Buffer.WriteString(strconv.FormatFloat(circle.Center.Y, 'f', -1, 64))
+	f.Buffer.WriteString("\" r=\"")
+	f.Buffer.WriteString(strconv.FormatUint(uint64(circle.Radius), 10))
+	f.Buffer.WriteString("\" fill=\"")
+	f.Buffer.WriteString(circle.Color)
+	f.Buffer.WriteString("\" />")
+	f.Buffer.WriteRune('\n')
 }

@@ -12,22 +12,22 @@ type Polyline struct {
 	Color  string
 }
 
-func (poly Polyline) SVGWrite(s svg) {
-	s.Buffer.WriteString("<polyline stroke=\"")
-	s.Buffer.WriteString(poly.Color)
-	s.Buffer.WriteString("\" stroke-width=\"")
-	s.Buffer.WriteString(strconv.FormatUint(uint64(poly.Width), 10))
-	s.Buffer.WriteString("\" fill=\"none\" points=\" ")
+func (poly Polyline) SVGWrite(f svg) {
+	f.Buffer.WriteString("<polyline stroke=\"")
+	f.Buffer.WriteString(poly.Color)
+	f.Buffer.WriteString("\" stroke-width=\"")
+	f.Buffer.WriteString(strconv.FormatUint(uint64(poly.Width), 10))
+	f.Buffer.WriteString("\" fill=\"none\" points=\" ")
 	for i, c := range poly.Points {
-		s.Buffer.WriteString(strconv.FormatFloat(c.X, 'f', -1, 64))
-		s.Buffer.WriteRune(',')
-		s.Buffer.WriteString(strconv.FormatFloat(c.Y, 'f', -1, 64))
+		f.Buffer.WriteString(strconv.FormatFloat(c.X, 'f', -1, 64))
+		f.Buffer.WriteRune(',')
+		f.Buffer.WriteString(strconv.FormatFloat(c.Y, 'f', -1, 64))
 
 		if i != len(poly.Points)-1 {
-			s.Buffer.WriteRune(' ')
+			f.Buffer.WriteRune(' ')
 		}
 	}
 
-	s.Buffer.WriteString("\" />")
-	s.Buffer.WriteRune('\n')
+	f.Buffer.WriteString("\" />")
+	f.Buffer.WriteRune('\n')
 }
