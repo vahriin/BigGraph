@@ -4,8 +4,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/vahriin/BigGraph/csv"
-	"github.com/vahriin/BigGraph/types"
+	"github.com/vahriin/BigGraph/Task1/types"
+	"github.com/vahriin/BigGraph/lib/csv"
 )
 
 // CSVNodeList write list of nodes to filename file

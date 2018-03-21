@@ -1,5 +1,7 @@
 package types
 
+import "github.com/vahriin/BigGraph/lib/coordinates"
+
 // Bounds is container for latitude and longitude of angles of rectangle area
 type Bounds struct {
 	Minlat float64 `xml:"minlat,attr"`
@@ -9,11 +11,11 @@ type Bounds struct {
 }
 
 // Maxs returns EuclidCoords of area's top right corner
-func (b Bounds) Maxs() EuclidCoords {
-	return GeographicCoords{Lon: b.Maxlon, Lat: b.Maxlat}.EuclidCoords()
+func (b Bounds) Maxs() coordinates.EuclidCoords {
+	return coordinates.GeographicCoords{Lon: b.Maxlon, Lat: b.Maxlat}.EuclidCoords()
 }
 
 // Mins returns EuclidCoords of area's lower left corner
-func (b Bounds) Mins() EuclidCoords {
-	return GeographicCoords{Lon: b.Minlon, Lat: b.Minlat}.EuclidCoords()
+func (b Bounds) Mins() coordinates.EuclidCoords {
+	return coordinates.GeographicCoords{Lon: b.Minlon, Lat: b.Minlat}.EuclidCoords()
 }

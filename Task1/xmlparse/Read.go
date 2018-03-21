@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 
-	"github.com/vahriin/BigGraph/types"
+	"github.com/vahriin/BigGraph/Task1/types"
 )
 
 func XMLRead(filename string) *types.Meta {

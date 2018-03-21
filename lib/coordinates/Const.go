@@ -1,4 +1,4 @@
-package types
+package coordinates
 
 // Multiplier is multiplier to increase the size of picture
 const Multiplier = 100

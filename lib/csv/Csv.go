@@ -5,7 +5,7 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/vahriin/BigGraph/types"
+	"github.com/vahriin/BigGraph/lib/coordinates"
 )
 
 type CSV struct {
@@ -40,16 +40,16 @@ func (csv CSV) ALLine(root uint64, children []uint64) {
 	csv.Buffer.WriteRune('\n')
 }
 
-func (csv CSV) NLLine(id uint64, coord *types.GeneralCoords) {
+func (csv CSV) NLLine(id uint64, coords *coordinates.GeneralCoords) {
 	csv.Buffer.WriteString(strconv.FormatUint(id, 10))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(coord.Earth.Lat, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coords.Earth.Lat, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(coord.Earth.Lon, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coords.Earth.Lon, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(coord.Euclid.X, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coords.Euclid.X, 'f', -1, 64))
 	csv.comma()
-	csv.Buffer.WriteString(strconv.FormatFloat(coord.Euclid.Y, 'f', -1, 64))
+	csv.Buffer.WriteString(strconv.FormatFloat(coords.Euclid.Y, 'f', -1, 64))
 	csv.Buffer.WriteRune('\n')
 }
 

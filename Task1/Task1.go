@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/vahriin/BigGraph/graph"
+	"github.com/vahriin/BigGraph/Task1/graph"
 
-	"github.com/vahriin/BigGraph/xmlparse"
+	"github.com/vahriin/BigGraph/Task1/xmlparse"
 )
 
 func flags() (filename string) {

@@ -4,8 +4,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/vahriin/BigGraph/csv"
-	"github.com/vahriin/BigGraph/types"
+	"github.com/vahriin/BigGraph/Task1/types"
+	"github.com/vahriin/BigGraph/lib/csv"
 )
 
 // CSVAdjList write adjacency list to csv file with 'filename' name.

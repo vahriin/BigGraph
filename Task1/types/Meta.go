@@ -1,5 +1,7 @@
 package types
 
+import "github.com/vahriin/BigGraph/lib/coordinates"
+
 // Meta is type contains all required information from parsed file
 type Meta struct {
 	Bounds Bounds `xml:"bounds"`
@@ -39,7 +41,7 @@ func (meta Meta) AdjList() AdjList {
 
 	var al AdjList
 	al.AL = make(map[uint64][]uint64)
-	al.Nodes = make(map[uint64]GeneralCoords)
+	al.Nodes = make(map[uint64]coordinates.GeneralCoords)
 
 	for _, way := range meta.Ways {
 		if way.IsHighway() {
@@ -54,7 +56,7 @@ func (meta Meta) AdjList() AdjList {
 					nodeEC.X -= rectMin.X
 					nodeEC.Y = rectMax.Y - nodeEC.Y
 
-					al.Nodes[nd.Ref] = GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
+					al.Nodes[nd.Ref] = coordinates.GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
 				} else {
 					al.AL[nd.Ref] = append(al.AL[nd.Ref], way.IncidentNodes(i)...)
 				}
@@ -63,30 +65,4 @@ func (meta Meta) AdjList() AdjList {
 	}
 
 	return al
-
-	/*var area Area
-	area.Highways = make([]Highway, 0, 15000)
-	area.Points = make(map[uint64]GeneralCoords)
-
-	for _, way := range meta.Ways {
-		if way.IsHighway() {
-			edge := way.Edge()
-			for _, id := range edge.NodesID {
-				if _, ok := area.Points[id]; !ok {
-					if node, ok1 := meta.search(id); ok1 {
-						nodeEC := node.EuclidCoords()
-
-						nodeEC.X -= rectMin.X
-						nodeEC.Y = rectMax.Y - nodeEC.Y
-
-						area.Points[id] = GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
-					} else {
-						panic("No nodes with id: " + strconv.FormatUint(id, 10))
-					}
-				}
-			}
-			area.Highways = append(area.Highways, edge)
-		}
-	}
-	return area*/
 }

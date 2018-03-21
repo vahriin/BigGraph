@@ -1,5 +1,7 @@
 package types
 
+import "github.com/vahriin/BigGraph/lib/coordinates"
+
 // Tag is data from <tag>
 type Tag struct {
 	Key   string `xml:"k,attr"`
@@ -14,5 +16,5 @@ type Nd struct {
 // Node is point on the Earth.
 type Node struct {
 	ID uint64 `xml:"id,attr"`
-	GeographicCoords
+	coordinates.GeographicCoords
 }

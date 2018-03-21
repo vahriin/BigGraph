@@ -2,13 +2,15 @@ package types
 
 import (
 	"math"
+
+	"github.com/vahriin/BigGraph/lib/coordinates"
 )
 
 // AdjList contains the AL - adjacency list like a map where key is point id and value is incident points id array
 // and Nodes - map of nodes, where key is point id
 type AdjList struct {
 	AL    map[uint64][]uint64
-	Nodes map[uint64]GeneralCoords
+	Nodes map[uint64]coordinates.GeneralCoords
 }
 
 func (al AdjList) onLine(left, center, right uint64) bool {
