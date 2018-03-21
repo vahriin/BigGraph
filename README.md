@@ -6,6 +6,6 @@
 
 Ссылки на выполненные задания:
 
-1. [Граф дорог городов России (Уфа)](https://github.com/vahriin/BigGraph/Task1)
+1. [Граф дорог городов России (Уфа)](https://github.com/vahriin/BigGraph/tree/master/Task1)
 
-1. [Кратчайшие пути в городе](https://githib.com/vahriin/BigGraph/Task2)
+1. [Кратчайшие пути в городе](https://githib.com/vahriin/BigGraph/tree/master/Task2)
