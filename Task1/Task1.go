@@ -33,9 +33,12 @@ func main() {
 
 	fmt.Println("File parsing...")
 	doc := xmlparse.XMLRead(mapsrc)
+	fmt.Println("File parsed. Time spent: ", time.Since(start), "\n")
+
+	fmt.Println("Build AdjList...")
 	adjList := doc.AdjList()
 	doc = nil
-	fmt.Println("File parsed. Time spent: ", time.Since(start), "\n")
+	fmt.Println("Done, time spent ", time.Since(start), "\n")
 
 	fmt.Println("Delete excess points...")
 	fmt.Println(adjList.DropExcessPoints(), " excess points deleted. Time spent: ", time.Since(start), "\n")
