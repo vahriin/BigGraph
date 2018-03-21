@@ -17,6 +17,5 @@
 .idea/
 .vscode/
 
-# Bad files
-bad/
+# Out files
 output/
