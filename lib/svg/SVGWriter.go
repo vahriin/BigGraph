@@ -1,5 +1,5 @@
 package svg
 
 type SVGWriter interface {
-	SVGWrite()
+	SVGWrite(s svg)
 }
