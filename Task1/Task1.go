@@ -3,13 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"runtime"
-	"sync"
 	"time"
 
 	"github.com/vahriin/BigGraph/Task1/graph"
-
 	"github.com/vahriin/BigGraph/Task1/xmlparse"
 )
 
@@ -35,7 +32,7 @@ func main() {
 	doc := xmlparse.XMLRead(mapsrc)
 	fmt.Println("File parsed. Time spent: ", time.Since(start), "\n")
 
-	fmt.Println("Build AdjList...")
+	fmt.Println("Building AdjList...")
 	adjList := doc.AdjList()
 	doc = nil
 	fmt.Println("Done, time spent ", time.Since(start), "\n")
@@ -45,17 +42,7 @@ func main() {
 
 	fmt.Println("Generate output...")
 
-	os.Mkdir("output", os.ModePerm)
-
-	var oh sync.WaitGroup
-	oh.Add(2)
-
-	go graph.CSVNodeList(adjList, "output/nodes_list.csv", &oh)
-	go graph.CSVAdjList(adjList, "output/adjacency_list.csv", &oh)
-
-	graph.SVGImage(adjList, "output/road_graph.svg")
-
-	oh.Wait()
+	graph.Output(adjList)
 
 	fmt.Println("Output generated. Time spent total: ", time.Since(start), "\n")
 	fmt.Println("Have a nice day!")

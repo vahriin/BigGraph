@@ -4,37 +4,26 @@ import (
 	"sync"
 
 	"github.com/vahriin/BigGraph/Task1/types"
-	"github.com/vahriin/BigGraph/lib/coordinates"
+	"github.com/vahriin/BigGraph/lib/svg"
 )
 
-// SVGImage draw the AdjList to .svg file
-func SVGImage(al types.AdjList, filename string) {
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	lineCh := make(chan [2]coordinates.EuclidCoords, 1000)
-	pointCh := make(chan coordinates.EuclidCoords, len(al.AL))
-
-	go writeSVG(lineCh, pointCh, filename, &wg)
-
-	processed := make(map[uint64]bool)
-
-	var line [2]coordinates.EuclidCoords
+// ProcessSVG draw the AdjList to .svg file TODO: outdated
+func ProcessSVG(svgChan chan<- svg.SVGWriter, wg *sync.WaitGroup, al types.AdjList) {
+	processed := make(map[uint64]struct{})
 
 	for node, incidentNodes := range al.AL {
 		for _, in := range incidentNodes {
 			if _, ok := processed[in]; !ok {
-				line[0] = al.Nodes[node].Euclid
-				line[1] = al.Nodes[in].Euclid
-				lineCh <- line
+				l := svg.Line{Begin: al.Nodes[node].Euclid, End: al.Nodes[in].Euclid,
+					Color: svg.LineColor, Width: svg.Width}
+				svgChan <- l
 			}
 		}
-		processed[node] = false
-		pointCh <- al.Nodes[node].Euclid
+		processed[node] = struct{}{}
+		svgChan <- svg.Circle{Center: al.Nodes[node].Euclid, Color: svg.CircleColor, Radius: svg.Width}
 	}
 
-	close(lineCh)
-	close(pointCh)
+	close(svgChan)
 
-	wg.Wait()
+	wg.Done()
 }

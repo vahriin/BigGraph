@@ -1,28 +1,18 @@
 package graph
 
 import (
-	"os"
 	"sync"
 
 	"github.com/vahriin/BigGraph/Task1/types"
 	"github.com/vahriin/BigGraph/lib/csv"
 )
 
-// CSVAdjList write adjacency list to csv file with 'filename' name.
-func CSVAdjList(al types.AdjList, filename string, wg *sync.WaitGroup) {
-	file, err := os.Create(filename)
-	if err != nil {
-		panic(err)
-	}
-
-	csvTable := csv.NewCSV(file)
-
-	defer func() {
-		csvTable.Close()
-		wg.Done()
-	}()
-
+// ProcessAlCSV write adjacency list to csv file with 'filename' name. TODO: outdated
+func ProcessAlCSV(csvChan chan<- csv.CSVWriter, wg *sync.WaitGroup, al types.AdjList) {
 	for node, incidentNodes := range al.AL {
-		csvTable.ALLine(node, incidentNodes)
+		csvChan <- csv.ALLine{VertexID: node, IncidentVertexesID: incidentNodes}
 	}
+
+	close(csvChan)
+	wg.Done()
 }
