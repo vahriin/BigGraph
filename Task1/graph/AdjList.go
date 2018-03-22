@@ -9,7 +9,7 @@ import (
 
 // ProcessAlCSV write adjacency list to csv file with 'filename' name. TODO: outdated
 func ProcessAlCSV(csvChan chan<- csv.CSVWriter, wg *sync.WaitGroup, al types.AdjList) {
-	for node, incidentNodes := range al.AL {
+	for node, incidentNodes := range al.AdjacencyList {
 		csvChan <- csv.ALLine{VertexID: node, IncidentVertexesID: incidentNodes}
 	}
 

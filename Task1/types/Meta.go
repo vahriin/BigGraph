@@ -40,14 +40,14 @@ func (meta Meta) AdjList() AdjList {
 	rectMax := meta.Bounds.Maxs()
 
 	var al AdjList
-	al.AL = make(map[uint64][]uint64)
+	al.AdjacencyList = make(map[uint64][]uint64)
 	al.Nodes = make(map[uint64]coordinates.GeneralCoords)
 
 	for _, way := range meta.Ways {
 		if way.IsHighway() {
 			for i, nd := range way.Refs {
-				if _, ok := al.AL[nd.Ref]; !ok {
-					al.AL[nd.Ref] = way.IncidentNodes(i)
+				if _, ok := al.AdjacencyList[nd.Ref]; !ok {
+					al.AdjacencyList[nd.Ref] = way.IncidentNodes(i)
 
 					//TODO:
 					node := meta.interpolationSearch(nd.Ref)
@@ -58,7 +58,7 @@ func (meta Meta) AdjList() AdjList {
 
 					al.Nodes[nd.Ref] = coordinates.GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
 				} else {
-					al.AL[nd.Ref] = append(al.AL[nd.Ref], way.IncidentNodes(i)...)
+					al.AdjacencyList[nd.Ref] = append(al.AdjacencyList[nd.Ref], way.IncidentNodes(i)...)
 				}
 			}
 		}

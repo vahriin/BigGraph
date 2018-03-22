@@ -11,7 +11,7 @@ import (
 func ProcessSVG(svgChan chan<- svg.SVGWriter, wg *sync.WaitGroup, al types.AdjList) {
 	processed := make(map[uint64]struct{})
 
-	for node, incidentNodes := range al.AL {
+	for node, incidentNodes := range al.AdjacencyList {
 		for _, in := range incidentNodes {
 			if _, ok := processed[in]; !ok {
 				l := svg.Line{Begin: al.Nodes[node].Euclid, End: al.Nodes[in].Euclid,

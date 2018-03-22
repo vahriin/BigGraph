@@ -3,15 +3,12 @@ package types
 import (
 	"math"
 
-	"github.com/vahriin/BigGraph/lib/coordinates"
+	"github.com/vahriin/BigGraph/lib/model"
 )
 
 // AdjList contains the AL - adjacency list like a map where key is point id and value is incident points id array
 // and Nodes - map of nodes, where key is point id
-type AdjList struct {
-	AL    map[uint64][]uint64
-	Nodes map[uint64]coordinates.GeneralCoords
-}
+type AdjList model.AdjList
 
 func (al AdjList) onLine(left, center, right uint64) bool {
 	areaOfTriangle := math.Abs(
@@ -30,17 +27,17 @@ func (al AdjList) onLine(left, center, right uint64) bool {
 func (al *AdjList) DropExcessPoints() int {
 	counter := 0
 
-	for point, incidentNodes := range al.AL {
+	for point, incidentNodes := range al.AdjacencyList {
 
 		if len(incidentNodes) == 2 {
 			// sum of distances between current point and those incident to it should not be much greater than
 			// distance between two incident points of current point according to the rule of the triangle
 			if al.onLine(incidentNodes[0], point, incidentNodes[1]) {
 
-				al.AL[incidentNodes[0]][linearSearch(al.AL[incidentNodes[0]], point)] = incidentNodes[1]
-				al.AL[incidentNodes[1]][linearSearch(al.AL[incidentNodes[1]], point)] = incidentNodes[0]
+				al.AdjacencyList[incidentNodes[0]][linearSearch(al.AdjacencyList[incidentNodes[0]], point)] = incidentNodes[1]
+				al.AdjacencyList[incidentNodes[1]][linearSearch(al.AdjacencyList[incidentNodes[1]], point)] = incidentNodes[0]
 
-				delete(al.AL, point)
+				delete(al.AdjacencyList, point)
 				delete(al.Nodes, point)
 				counter++
 			}
