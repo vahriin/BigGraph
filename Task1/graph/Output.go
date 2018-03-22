@@ -26,7 +26,7 @@ func Output(al types.AdjList) {
 
 	nlChan := make(chan csv.CSVWriter, 1000)
 	wg.Add(2)
-	go ProcessAlCSV(nlChan, &wg, al)
+	go ProcessNlCSV(nlChan, &wg, al)
 	go csv.ParallelWrite(nlChan, &wg, "output/nodes_list.csv")
 
 	wg.Wait()

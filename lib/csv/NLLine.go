@@ -11,6 +11,23 @@ type NLLine struct {
 	coordinates.GeneralCoords
 }
 
+/*func NewNLLine(f csv) (NLLine, error) {
+	str, err := f.Buffer.ReadString('\n')
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	line := strings.Split(str, ",")
+
+	var nll NLLine
+	nll.VertexID, err = strconv.ParseUint(line[0], 10, 64)
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	lat, err := strconv.ParseFloat()
+}*/
+
 func (nl NLLine) CSVWrite(f csv) {
 	f.Buffer.WriteString(strconv.FormatUint(nl.VertexID, 10))
 	f.comma()

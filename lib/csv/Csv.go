@@ -6,15 +6,15 @@ import (
 )
 
 type csv struct {
-	writer io.WriteCloser
-	Buffer *bufio.Writer
+	rw     io.ReadWriteCloser
+	Buffer *bufio.ReadWriter
 }
 
-func newCSV(wc io.WriteCloser) csv {
+func newCSV(rwc io.ReadWriteCloser) csv {
 	var f csv
 
-	f.writer = wc
-	f.Buffer = bufio.NewWriter(f.writer)
+	f.rw = rwc
+	f.Buffer = bufio.NewReadWriter(bufio.NewReader(f.rw), bufio.NewWriter(f.rw))
 
 	return f
 }
@@ -22,7 +22,7 @@ func newCSV(wc io.WriteCloser) csv {
 func (f csv) close() {
 	f.Buffer.WriteRune('\n')
 	f.Buffer.Flush()
-	f.writer.Close()
+	f.rw.Close()
 }
 
 func (f csv) comma() {
