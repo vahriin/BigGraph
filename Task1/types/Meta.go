@@ -36,8 +36,8 @@ func (meta Meta) interpolationSearch(id uint64) Node {
 
 // AdjList build the highways graph from Meta data
 func (meta Meta) AdjList() AdjList {
-	rectMin := meta.Bounds.Mins()
-	rectMax := meta.Bounds.Maxs()
+	//rectMin := meta.Bounds.Mins()
+	//rectMax := meta.Bounds.Maxs()
 
 	var al AdjList
 	al.AdjacencyList = make(map[uint64][]uint64)
@@ -49,12 +49,13 @@ func (meta Meta) AdjList() AdjList {
 				if _, ok := al.AdjacencyList[nd.Ref]; !ok {
 					al.AdjacencyList[nd.Ref] = way.IncidentNodes(i)
 
-					//TODO:
 					node := meta.interpolationSearch(nd.Ref)
 					nodeEC := node.EuclidCoords()
 
-					nodeEC.X -= rectMin.X
-					nodeEC.Y = rectMax.Y - nodeEC.Y
+					nodeEC.Y = -nodeEC.Y
+
+					/*nodeEC.X -= rectMin.X
+					nodeEC.Y = rectMax.Y - nodeEC.Y*/
 
 					al.Nodes[nd.Ref] = coordinates.GeneralCoords{Earth: node.GeographicCoords, Euclid: nodeEC}
 				} else {

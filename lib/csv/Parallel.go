@@ -34,7 +34,10 @@ func ReadNodeList(nlChan chan<- map[uint64]coordinates.GeneralCoords, filename s
 
 	csvFile := newCSV(file)
 
-	defer csvFile.close()
+	defer func() {
+		csvFile.close()
+		close(nlChan)
+	}()
 
 	nl := make(map[uint64]coordinates.GeneralCoords)
 
@@ -63,7 +66,10 @@ func ReadAdjacencyList(alChan chan<- map[uint64][]uint64, filename string) {
 
 	csvFile := newCSV(file)
 
-	defer csvFile.close()
+	defer func() {
+		csvFile.close()
+		close(alChan)
+	}()
 
 	al := make(map[uint64][]uint64)
 
@@ -108,7 +114,7 @@ func ReadPointsID(lChan chan<- []uint64, filename string) {
 		}
 	}
 
-	if err != io.EOF {
+	if err != nil && err != io.EOF {
 		panic(err)
 	}
 }
