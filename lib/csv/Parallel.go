@@ -84,3 +84,31 @@ func ReadAdjacencyList(alChan chan<- map[uint64][]uint64, filename string) {
 
 	alChan <- al
 }
+
+func ReadPointsID(lChan chan<- []uint64, filename string) {
+	file, err := os.OpenFile(filename, os.O_RDONLY, 777)
+	if err != nil {
+		panic(err)
+	}
+
+	csvFile := newCSV(file)
+
+	defer func() {
+		csvFile.close()
+		close(lChan)
+	}()
+
+	for {
+		line, err := NewLine(csvFile)
+
+		if err == nil {
+			lChan <- line
+		} else {
+			break
+		}
+	}
+
+	if err != io.EOF {
+		panic(err)
+	}
+}
