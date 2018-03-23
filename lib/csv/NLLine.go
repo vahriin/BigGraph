@@ -1,7 +1,9 @@
 package csv
 
 import (
+	"io"
 	"strconv"
+	"strings"
 
 	"github.com/vahriin/BigGraph/lib/coordinates"
 )
@@ -11,13 +13,18 @@ type NLLine struct {
 	coordinates.GeneralCoords
 }
 
-/*func NewNLLine(f csv) (NLLine, error) {
+func NewNlLine(f csv) (NLLine, error) {
 	str, err := f.Buffer.ReadString('\n')
+
 	if err != nil {
 		return NLLine{}, err
 	}
 
-	line := strings.Split(str, ",")
+	line := strings.Split(strings.TrimSuffix(str, "\n"), ",")
+
+	if line[0] == "" {
+		return NLLine{}, io.EOF
+	}
 
 	var nll NLLine
 	nll.VertexID, err = strconv.ParseUint(line[0], 10, 64)
@@ -25,8 +32,28 @@ type NLLine struct {
 		return NLLine{}, err
 	}
 
-	lat, err := strconv.ParseFloat()
-}*/
+	nll.Earth.Lat, err = strconv.ParseFloat(line[1], 64)
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	nll.Earth.Lon, err = strconv.ParseFloat(line[2], 64)
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	nll.Euclid.X, err = strconv.ParseFloat(line[3], 64)
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	nll.Euclid.Y, err = strconv.ParseFloat(line[4], 64)
+	if err != nil {
+		return NLLine{}, err
+	}
+
+	return nll, nil
+}
 
 func (nl NLLine) CSVWrite(f csv) {
 	f.Buffer.WriteString(strconv.FormatUint(nl.VertexID, 10))
