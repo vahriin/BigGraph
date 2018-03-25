@@ -12,22 +12,22 @@ import (
 func Output(al types.AdjList) {
 	var wg sync.WaitGroup
 
-	os.Mkdir("output", os.ModePerm)
+	os.MkdirAll("output/Task1", os.ModePerm)
 
 	svgChan := make(chan svg.SVGWriter, 1000)
 	wg.Add(2)
 	go ProcessSVG(svgChan, &wg, al)
-	go svg.ParallelWrite(svgChan, &wg, "output/road_graph.svg")
+	go svg.ParallelWrite(svgChan, &wg, "output/Task1/road_graph.svg")
 
 	alChan := make(chan csv.CSVWriter, 1000)
 	wg.Add(2)
 	go ProcessAlCSV(alChan, &wg, al)
-	go csv.ParallelWrite(alChan, &wg, "output/adjacency_list.csv")
+	go csv.ParallelWrite(alChan, &wg, "output/Task1/adjacency_list.csv")
 
 	nlChan := make(chan csv.CSVWriter, 1000)
 	wg.Add(2)
 	go ProcessNlCSV(nlChan, &wg, al)
-	go csv.ParallelWrite(nlChan, &wg, "output/nodes_list.csv")
+	go csv.ParallelWrite(nlChan, &wg, "output/Task1/nodes_list.csv")
 
 	wg.Wait()
 }

@@ -14,7 +14,7 @@ func flags() (filename string) {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
-		return "map.osm"
+		return "input/Task1/map.osm"
 	}
 	return args[0]
 }
