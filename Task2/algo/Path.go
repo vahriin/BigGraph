@@ -1,3 +1,6 @@
 package algo
 
-type Path []uint64
+type Path struct {
+	Points []uint64
+	Len    float64
+}

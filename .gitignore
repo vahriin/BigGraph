@@ -22,3 +22,7 @@ output/
 
 # In files
 input/
+input/adjacency_list.csv
+input/nodes_list.csv
+input/road_graph.svg
+Task2/debug
