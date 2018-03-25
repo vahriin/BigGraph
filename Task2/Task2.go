@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"sync"
 
 	"github.com/vahriin/BigGraph/Task2/algo"
 	"github.com/vahriin/BigGraph/Task2/input"
 	"github.com/vahriin/BigGraph/lib/coordinates"
 	"github.com/vahriin/BigGraph/lib/csv"
 	"github.com/vahriin/BigGraph/lib/model"
+	"github.com/vahriin/BigGraph/lib/svg"
 )
 
 func main() {
@@ -35,6 +36,21 @@ func main() {
 
 	go algo.Dijkstra(pathChan, destinationPoints, 0, al)
 
-	fmt.Printf("%v\n", <-pathChan)
+	outMapChan := make(chan svg.SVGWriter, 10)
 
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go svg.ParallelWrite(outMapChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/road_graph2.svg")
+
+	for path := range pathChan {
+		polyline := svg.Polyline{Points: make([]coordinates.EuclidCoords, 0, len(path.Points)), Width: svg.WidthPolyline, Color: svg.PolylineColor}
+
+		for _, id := range path.Points {
+			polyline.Points = append(polyline.Points, al.Nodes[id].Euclid)
+		}
+
+		outMapChan <- polyline
+	}
+	close(outMapChan)
+	wg.Wait()
 }

@@ -6,15 +6,15 @@ import (
 )
 
 type svg struct {
-	writer io.WriteCloser
-	Buffer *bufio.Writer
+	rw     io.ReadWriteCloser
+	Buffer *bufio.ReadWriter
 }
 
-func newSVG(writer io.WriteCloser) svg {
+func newSVG(writer io.ReadWriteCloser) svg {
 	var f svg
 
-	f.writer = writer
-	f.Buffer = bufio.NewWriter(writer)
+	f.rw = writer
+	f.Buffer = bufio.NewReadWriter(bufio.NewReader(writer), bufio.NewWriter(writer))
 
 	header := `<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">`
 	f.Buffer.WriteString(header)
@@ -27,5 +27,5 @@ func (f svg) close() {
 	end := "</svg>\n"
 	f.Buffer.WriteString(end)
 	f.Buffer.Flush()
-	f.writer.Close()
+	f.rw.Close()
 }
