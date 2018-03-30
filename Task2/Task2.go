@@ -15,37 +15,48 @@ import (
 )
 
 func main() {
-	dp := make(chan []uint64, 10)
-	go csv.ReadPointsID(dp, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/input/Task2/destination_points.csv")
+	oneStartPointChannel := make(chan coordinates.GeneralCoords)
+	destinationPointsChannel := make(chan []uint64, 10)
+	oneAdjacencyListChannel := make(chan model.AdjList)
 
-	p := make(chan coordinates.GeneralCoords)
-	go input.ReadPoint(p, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/input/Task2/point.xml")
+	input.ParallelInput(oneStartPointChannel, destinationPointsChannel, oneAdjacencyListChannel, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/input/Task2/")
 
-	startPoint := <-p
-
+	// getting of general variables
+	startPoint := <-oneStartPointChannel
 	destinationPoints := make(map[uint64]struct{})
-	for pointsID := range dp {
+	for pointsID := range destinationPointsChannel {
 		destinationPoints[pointsID[0]] = struct{}{}
 	}
+	adjacencyList := <-oneAdjacencyListChannel
 
-	al := model.NewAdjList("/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/input/Task2/adjacency_list.csv", "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/input/Task2/nodes_list.csv")
+	// modify adjacency list
+	nearestPointID := algo.Search(adjacencyList, startPoint)
+	adjacencyList.Nodes[0] = startPoint
+	adjacencyList.AdjacencyList[0] = []uint64{nearestPointID}
 
-	nearestPointID := algo.Search(al, startPoint)
-
-	al.Nodes[0] = startPoint
-	al.AdjacencyList[0] = []uint64{nearestPointID}
-
-	pathChan := make(chan algo.Path)
-
-	go algo.Dijkstra(pathChan, destinationPoints, 0, al)
-
-	outMapChan := make(chan svg.SVGWriter, 10000)
-
+	// file-writer goroutines
 	os.MkdirAll("output/Task2", 0777)
-
 	var wg sync.WaitGroup
+	outMapChan := make(chan svg.SVGWriter, 10000)
+	outCSVChan := make(chan csv.CSVWriter, 10000)
 	wg.Add(2)
 	go svg.ParallelWrite(outMapChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/Task2/road_graph.svg")
-	go output.ProcessSVG(outMapChan, &wg, al, pathChan)
+	go csv.ParallelWrite(outCSVChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/Task2/pathways.csv")
+
+	// draw graph
+	wg.Add(1)
+	go output.DrawGraph(outMapChan, &wg, adjacencyList)
+
+	// algorithms
+	pathChan := make(chan algo.Path)
+	go algo.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
+
+	//
+	output.ProcessPath(outCSVChan, outMapChan, adjacencyList, pathChan)
+	close(outCSVChan)
+
+	outMapChan <- svg.Circle{Center: startPoint.Euclid, Color: "green", Radius: svg.PointAttentionRadius}
+	close(outMapChan)
+
 	wg.Wait()
 }
