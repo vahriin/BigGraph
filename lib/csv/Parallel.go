@@ -27,7 +27,7 @@ func ParallelWrite(csvw <-chan CSVWriter, wg *sync.WaitGroup, filename string) {
 }
 
 func ReadNodeList(nlChan chan<- map[uint64]coordinates.GeneralCoords, filename string) {
-	file, err := os.OpenFile(filename, os.O_RDONLY, 777)
+	file, err := os.OpenFile(filename, os.O_RDONLY, 0777)
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +59,7 @@ func ReadNodeList(nlChan chan<- map[uint64]coordinates.GeneralCoords, filename s
 }
 
 func ReadAdjacencyList(alChan chan<- map[uint64][]uint64, filename string) {
-	file, err := os.OpenFile(filename, os.O_RDONLY, 777)
+	file, err := os.OpenFile(filename, os.O_RDONLY, 0777)
 	if err != nil {
 		panic(err)
 	}
@@ -92,7 +92,7 @@ func ReadAdjacencyList(alChan chan<- map[uint64][]uint64, filename string) {
 }
 
 func ReadPointsID(lChan chan<- []uint64, filename string) {
-	file, err := os.OpenFile(filename, os.O_RDONLY, 777)
+	file, err := os.OpenFile(filename, os.O_RDWR, 0777)
 	if err != nil {
 		panic(err)
 	}

@@ -15,12 +15,12 @@ func ProcessSVG(svgChan chan<- svg.SVGWriter, wg *sync.WaitGroup, al types.AdjLi
 		for _, in := range incidentNodes {
 			if _, ok := processed[in]; !ok {
 				l := svg.Line{Begin: al.Nodes[node].Euclid, End: al.Nodes[in].Euclid,
-					Color: svg.LineColor, Width: svg.Width}
+					Color: svg.LineColor, Width: svg.LineWidth}
 				svgChan <- l
 			}
 		}
 		processed[node] = struct{}{}
-		svgChan <- svg.Circle{Center: al.Nodes[node].Euclid, Color: svg.CircleColor, Radius: svg.Width}
+		svgChan <- svg.Circle{Center: al.Nodes[node].Euclid, Color: svg.CircleColor, Radius: svg.PointRadius}
 	}
 
 	close(svgChan)

@@ -62,6 +62,8 @@ func Dijkstra(out chan<- Path, endpoints map[uint64]struct{}, start uint64, al m
 			}
 		}
 
+		//fmt.Printf("%d\n", currentVertexID)
+
 		// point is processed
 		processed[currentVertexID] = true
 	}
