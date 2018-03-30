@@ -32,8 +32,6 @@ func (c GeographicCoords) EuclidCoords() EuclidCoords {
 	ec.X = Radius * lonRad
 	ec.Y = Radius * math.Log(math.Tan(math.Pi/4+latRad/2))
 
-	//fmt.Printf("%f\n", ec.X)
-
 	ec.X *= Multiplier
 	ec.Y *= Multiplier
 
