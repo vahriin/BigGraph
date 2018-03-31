@@ -1,13 +1,15 @@
 package main
 
 import (
+	"log"
 	"os"
+	"runtime"
 	"sync"
+	"time"
 
-	"github.com/vahriin/BigGraph/Task2/output"
-
-	"github.com/vahriin/BigGraph/Task2/algo"
+	"github.com/vahriin/BigGraph/Task2/algorithm"
 	"github.com/vahriin/BigGraph/Task2/input"
+	"github.com/vahriin/BigGraph/Task2/output"
 	"github.com/vahriin/BigGraph/lib/coordinates"
 	"github.com/vahriin/BigGraph/lib/csv"
 	"github.com/vahriin/BigGraph/lib/model"
@@ -15,6 +17,11 @@ import (
 )
 
 func main() {
+	numcpu := runtime.NumCPU()
+	runtime.GOMAXPROCS(numcpu)
+
+	start := time.Now()
+
 	oneStartPointChannel := make(chan coordinates.GeneralCoords)
 	destinationPointsChannel := make(chan []uint64, 10)
 	oneAdjacencyListChannel := make(chan model.AdjList)
@@ -30,7 +37,7 @@ func main() {
 	adjacencyList := <-oneAdjacencyListChannel
 
 	// modify adjacency list
-	nearestPointID := algo.Search(adjacencyList, startPoint)
+	nearestPointID := algorithm.Search(adjacencyList, startPoint)
 	adjacencyList.Nodes[0] = startPoint
 	adjacencyList.AdjacencyList[0] = []uint64{nearestPointID}
 
@@ -38,7 +45,7 @@ func main() {
 	os.MkdirAll("output/Task2", 0777)
 	var wg sync.WaitGroup
 	outMapChan := make(chan svg.SVGWriter, 10000)
-	outCSVChan := make(chan csv.CSVWriter, 10000)
+	outCSVChan := make(chan csv.CSVWriter, len(destinationPoints))
 	wg.Add(2)
 	go svg.ParallelWrite(outMapChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/Task2/road_graph.svg")
 	go csv.ParallelWrite(outCSVChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/Task2/pathways.csv")
@@ -48,8 +55,8 @@ func main() {
 	go output.DrawGraph(outMapChan, &wg, adjacencyList)
 
 	// algorithms
-	pathChan := make(chan algo.Path)
-	go algo.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
+	pathChan := make(chan model.Path)
+	go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
 
 	//
 	output.ProcessPath(outCSVChan, outMapChan, adjacencyList, pathChan)
@@ -59,4 +66,6 @@ func main() {
 	close(outMapChan)
 
 	wg.Wait()
+
+	log.Println("End; time spent:", time.Since(start))
 }

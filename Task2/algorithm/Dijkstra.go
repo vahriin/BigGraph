@@ -1,4 +1,4 @@
-package algo
+package algorithm
 
 import (
 	"math"
@@ -9,7 +9,7 @@ import (
 	"github.com/vahriin/BigGraph/lib/model"
 )
 
-func Dijkstra(out chan<- Path, endpoints map[uint64]struct{}, start uint64, al model.AdjList) {
+func Dijkstra(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, al model.AdjList) {
 	distances, processed, previousVertices := dPrepare(al)
 
 	defer close(out)
@@ -33,7 +33,7 @@ func Dijkstra(out chan<- Path, endpoints map[uint64]struct{}, start uint64, al m
 
 		// make path to point in endpoints
 		if _, ok := endpoints[currentVertexID]; ok {
-			path := Path{Len: distances[currentVertexID], Points: make([]uint64, 0, 20)}
+			path := model.Path{Len: distances[currentVertexID], Points: make([]uint64, 0, 20)}
 			tempID := currentVertexID
 
 			for tempID != start {

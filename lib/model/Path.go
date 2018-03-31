@@ -1,4 +1,4 @@
-package algo
+package model
 
 type Path struct {
 	Points []uint64
