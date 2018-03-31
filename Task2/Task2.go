@@ -51,13 +51,16 @@ func main() {
 	go csv.ParallelWrite(outCSVChan, &wg, "/home/vahriin/Projects/GO/src/github.com/vahriin/BigGraph/output/Task2/pathways.csv")
 
 	// draw graph
-	wg.Add(1)
-	go output.DrawGraph(outMapChan, &wg, adjacencyList)
+	var dgwg sync.WaitGroup
+	dgwg.Add(1)
+	go output.DrawGraph(outMapChan, &dgwg, adjacencyList)
 
 	// algorithms
 	pathChan := make(chan model.Path)
-	go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
+	//go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
+	go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
 
+	dgwg.Wait()
 	//
 	output.ProcessPath(outCSVChan, outMapChan, adjacencyList, pathChan)
 	close(outCSVChan)
