@@ -63,7 +63,7 @@ func Levit(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 		processingStatus[currentVertex] = 0
 	}
 
-	for endpoint, _ := range endpoints {
+	/*for endpoint, _ := range endpoints {
 		path := model.Path{Len: distances[endpoint], Points: make([]uint64, 0, 20)}
 		tempID := endpoint
 
@@ -73,7 +73,7 @@ func Levit(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 		}
 
 		path.Points = append(path.Points, tempID)
-	}
+	}*/
 
 	for len(endpoints) > 0 {
 		minimum := math.MaxFloat64

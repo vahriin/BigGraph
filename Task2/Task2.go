@@ -59,6 +59,7 @@ func main() {
 	pathChan := make(chan model.Path)
 	//go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
 	go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
+	//go algorithm.Astar(pathChan, destinationPoints, 0, adjacencyList)
 
 	dgwg.Wait()
 	//
