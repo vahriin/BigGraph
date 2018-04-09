@@ -8,4 +8,4 @@
 
 1. [Граф дорог городов России (Уфа)](https://github.com/vahriin/BigGraph/tree/master/Task1)
 
-1. [Кратчайшие пути в городе](https://githib.com/vahriin/BigGraph/tree/master/Task2)
+1. [Кратчайшие пути в городе](https://github.com/vahriin/BigGraph/tree/master/Task2)
