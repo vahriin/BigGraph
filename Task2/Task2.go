@@ -15,13 +15,6 @@ import (
 	"github.com/vahriin/BigGraph/lib/svg"
 )
 
-func pf() (bool, bool) {
-	hell := flag.Bool("through_the_gates_of_hell", false, "")
-	test := flag.Bool("t", false, "no output file")
-	flag.Parse()
-	return *hell, *test
-}
-
 func main() {
 	numcpu := runtime.NumCPU()
 	runtime.GOMAXPROCS(numcpu)
@@ -35,41 +28,18 @@ func main() {
 	input.ParallelInput(oneStartPointChannel, destinationPointsChannel, oneAdjacencyListChannel, "input/Task2/")
 
 	// getting of general variables
-	startPoint := <-oneStartPointChannel
-	destinationPoints := make(map[uint64]struct{})
-	for pointsID := range destinationPointsChannel {
-		destinationPoints[pointsID[0]] = struct{}{}
-	}
-	adjacencyList := <-oneAdjacencyListChannel
+	startPoint, destinationPoints, adjacencyList := getInput(destinationPointsChannel, oneStartPointChannel, oneAdjacencyListChannel)
 
 	// modify adjacency list
-	nearestPointID := algorithm.Search(adjacencyList, startPoint)
-	adjacencyList.Nodes[0] = startPoint
-	adjacencyList.AdjacencyList[0] = []uint64{nearestPointID}
+	modifyAL(&adjacencyList, startPoint)
 
 	// file-writer goroutines
-	var wg sync.WaitGroup
-	outMapChan := make(chan svg.SVGWriter, 10000)
-	outCSVChan := make(chan csv.CSVWriter, len(destinationPoints))
-	wg.Add(2)
-
-	directory := "output/Task2/"
-	rg := directory + "road_graph.svg"
-	pw := directory + "pathways.csv"
-
-	if test {
-		directory = ""
-		rg = "/dev/null"
-		pw = "/dev/null"
-	}
-	os.MkdirAll(directory, 0777)
-	go svg.ParallelWrite(outMapChan, &wg, rg)
-	go csv.ParallelWrite(outCSVChan, &wg, pw)
+	outSVGChan, outCSVChan, wg := createInputChannel(test, 10000, len(destinationPoints))
 
 	// draw graph
 	var dgwg sync.WaitGroup
 	dgwg.Add(1)
-	go output.DrawGraph(outMapChan, &dgwg, adjacencyList)
+	go output.DrawGraph(outSVGChan, &dgwg, adjacencyList)
 
 	pathChan := make(chan model.Path, 10)
 
@@ -85,12 +55,53 @@ func main() {
 
 	dgwg.Wait()
 
-	output.ProcessPath(outCSVChan, outMapChan, adjacencyList, pathChan)
+	output.ProcessPath(outCSVChan, outSVGChan, adjacencyList, pathChan)
 
 	close(outCSVChan)
 
-	outMapChan <- svg.Circle{Center: startPoint.Euclid, Color: "green", Radius: svg.PointAttentionRadius}
-	close(outMapChan)
+	outSVGChan <- svg.Circle{Center: startPoint.Euclid, Color: "green", Radius: svg.PointAttentionRadius}
+	close(outSVGChan)
 
 	wg.Wait()
+
+}
+
+func pf() (bool, bool) {
+	hell := flag.Bool("through_the_gates_of_hell", false, "")
+	test := flag.Bool("t", false, "no output file")
+	flag.Parse()
+	return *hell, *test
+}
+
+func getInput(dpCh <-chan []uint64, spCh <-chan coordinates.GeneralCoords, alCh <-chan model.AdjList) (coordinates.GeneralCoords, map[uint64]struct{}, model.AdjList) {
+	destinationPoints := make(map[uint64]struct{})
+	startPoint := <-spCh
+	for pointsID := range dpCh {
+		destinationPoints[pointsID[0]] = struct{}{}
+	}
+	adjacencyList := <-alCh
+	return startPoint, destinationPoints, adjacencyList
+}
+
+func modifyAL(al *model.AdjList, sp coordinates.GeneralCoords) {
+	nearestPointID := algorithm.Search(al, sp)
+	al.Nodes[0] = sp
+	al.AdjacencyList[0] = []uint64{nearestPointID}
+}
+
+func createInputChannel(test bool, svgCap int, csvCap int) (chan svg.SVGWriter, chan csv.CSVWriter, *sync.WaitGroup) {
+	var wg sync.WaitGroup
+	outMapChan := make(chan svg.SVGWriter, svgCap)
+	outCSVChan := make(chan csv.CSVWriter, csvCap)
+	wg.Add(2)
+
+	if !test {
+		os.MkdirAll("output/Task2/", 0777)
+		go svg.ParallelWrite(outMapChan, &wg, "output/Task2/road_graph.svg")
+		go csv.ParallelWrite(outCSVChan, &wg, "output/Task2/pathways.csv")
+	} else {
+		go svg.ParallelWrite(outMapChan, &wg, "/dev/null")
+		go csv.ParallelWrite(outCSVChan, &wg, "/dev/null")
+	}
+	return outMapChan, outCSVChan, &wg
 }

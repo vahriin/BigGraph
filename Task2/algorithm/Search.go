@@ -13,7 +13,7 @@ type pointDist struct {
 	dist  float64
 }
 
-func Search(al model.AdjList, coords coordinates.GeneralCoords) (ID uint64) {
+func Search(al *model.AdjList, coords coordinates.GeneralCoords) (ID uint64) {
 	pdChan := make(chan pointDist, 1000)
 	idChan := make(chan uint64)
 
