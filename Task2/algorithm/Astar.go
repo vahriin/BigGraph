@@ -29,22 +29,21 @@ func Astar(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 
 	for i := 0; i < len(paths); i++ {
 		minimum := math.MaxFloat64
-		var minimumID int
+		var minimumIndex int
 		for index, p := range paths {
 			if p.Len < minimum {
 				minimum = p.Len
-				minimumID = index
+				minimumIndex = index
 			}
 		}
 
-		// if point is unreachable
-		if minimumID == 0 {
+		if math.Abs(minimum-math.MaxFloat64) < 1E-6 {
 			return
 		}
 
-		out <- paths[minimumID]
+		out <- paths[minimumIndex]
 
-		paths[minimumID].Len = math.MaxFloat64
+		paths[minimumIndex].Len = math.MaxFloat64
 	}
 }
 
@@ -81,13 +80,14 @@ func astar(out chan<- model.Path, start uint64, end uint64, al model.AdjList, dm
 		processed[currentVertex] = struct{}{}
 
 		for _, incidentVertex := range al.AdjacencyList[currentVertex] {
+			if _, ok := processed[incidentVertex]; ok {
+				continue
+			}
+
 			tentativeScore := dm.distance(currentVertex) +
 				coordinates.Distance(al.Nodes[currentVertex].Euclid, al.Nodes[incidentVertex].Euclid)
 
-			if _, ok := processed[incidentVertex]; ok && tentativeScore >= dm.distance(incidentVertex) {
-				continue
-			}
-			if _, ok := processed[incidentVertex]; !ok || tentativeScore < dm.distance(incidentVertex) {
+			if _, ok := heuristicValues[incidentVertex]; !ok || tentativeScore < dm.distance(incidentVertex) {
 				previousVertices[incidentVertex] = currentVertex
 				dm.setDistance(incidentVertex, tentativeScore)
 				heuristicValues[incidentVertex] = dm.distance(incidentVertex) +
