@@ -6,7 +6,7 @@ minlon = 55.7748500
 maxlat = 54.8314500 
 maxlon = 56.1668500
 
-numberOfIteration = 0
+numberOfIteration = 1
 allTime = 0
 
 lat = minlat
@@ -30,6 +30,9 @@ while lat < maxlat:
         allTime += (endTime - startTime)
 
         lon += (maxlon - minlon) / 10
+
+        print("Test point", numberOfIteration, "of", 100, 'spent time', endTime - startTime, 'second')
+        numberOfIteration += 1
     lat += (maxlat - minlat) / 10
 
 print(allTime)
