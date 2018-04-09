@@ -26,7 +26,7 @@
 
 #### Готовый билд: 
 
-[Скачайте](https://drive.google.com/drive/folders/1ciht0fpaZqSw5CZU6d4OGZOmX4sX21Y0?usp=sharing) готовый билд для Вашей OS. 
+[Скачайте](https://drive.google.com/drive/folders/183m1njib8Cb_MVhtoaSGwMIuw7jjmFg4?usp=sharing) готовый билд для Вашей OS. 
 
 #### Сборка из исходников:
 
