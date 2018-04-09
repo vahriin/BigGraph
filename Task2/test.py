@@ -23,7 +23,7 @@ while lat < maxlat:
 
         startTime = time.time()
 
-        subprocess.call('go run $GOPATH/src/github.com/vahriin/BigGraph/Task2/Task2.go', shell=True)
+        subprocess.call('go run $GOPATH/src/github.com/vahriin/BigGraph/Task2/Task2.go -t', shell=True)
 
         endTime = time.time()
 
@@ -31,6 +31,5 @@ while lat < maxlat:
 
         lon += (maxlon - minlon) / 10
     lat += (maxlat - minlat) / 10
-    break
 
 print(allTime)

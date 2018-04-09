@@ -85,6 +85,10 @@ func Levit(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 			}
 		}
 
+		if minimumID == 0 {
+			return
+		}
+
 		path := model.Path{Len: distances[minimumID], Points: make([]uint64, 0, 20)}
 		tempID := minimumID
 

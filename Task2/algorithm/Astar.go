@@ -29,17 +29,22 @@ func Astar(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 
 	for i := 0; i < len(paths); i++ {
 		minimum := math.MaxFloat64
-		var minimumIndex int
+		var minimumID int
 		for index, p := range paths {
 			if p.Len < minimum {
 				minimum = p.Len
-				minimumIndex = index
+				minimumID = index
 			}
 		}
 
-		out <- paths[minimumIndex]
+		// if point is unreachable
+		if minimumID == 0 {
+			return
+		}
 
-		paths[minimumIndex].Len = math.MaxFloat64
+		out <- paths[minimumID]
+
+		paths[minimumID].Len = math.MaxFloat64
 	}
 }
 
@@ -48,13 +53,19 @@ func astar(out chan<- model.Path, start uint64, end uint64, al model.AdjList, dm
 	previousVertices := make(map[uint64]uint64)
 	processed := make(map[uint64]struct{})
 
+	path := model.Path{Len: math.MaxFloat64, Points: make([]uint64, 0, 20)}
+
+	defer func() {
+		out <- path
+	}()
+
 	heuristicValues[start] = getHF()(al.Nodes[start].Euclid, al.Nodes[end].Euclid)
 
 	for len(heuristicValues) != 0 {
 		currentVertex := searchMinHeuristic(heuristicValues)
 
 		if currentVertex == end {
-			path := model.Path{Len: dm.distance(currentVertex), Points: make([]uint64, 0, 20)}
+			path.Len = dm.distance(currentVertex)
 			tempID := currentVertex
 
 			for tempID != start {
@@ -63,8 +74,6 @@ func astar(out chan<- model.Path, start uint64, end uint64, al model.AdjList, dm
 			}
 
 			path.Points = append(path.Points, tempID)
-
-			out <- path
 			break
 		}
 
