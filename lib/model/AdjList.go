@@ -27,7 +27,7 @@ func NewAdjList(adjacencyList, nodesList string) AdjList {
 	return al
 }
 
-func (al *AdjList) AddPoint(coords coordinates.GeneralCoords) {
+func (al AdjList) AddPoint(coords coordinates.GeneralCoords) {
 	pdChan := make(chan pointDist, 1000)
 
 	go func() {
@@ -41,6 +41,7 @@ func (al *AdjList) AddPoint(coords coordinates.GeneralCoords) {
 
 		al.Nodes[0] = coords
 		al.AdjacencyList[0] = []uint64{minimal.point}
+		al.AdjacencyList[minimal.point] = append(al.AdjacencyList[minimal.point], 0)
 	}()
 
 	var wg sync.WaitGroup
