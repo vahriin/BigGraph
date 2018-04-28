@@ -6,9 +6,9 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/vahriin/BigGraph/Task2/algorithm"
 	"github.com/vahriin/BigGraph/Task2/input"
 	"github.com/vahriin/BigGraph/Task2/output"
+	"github.com/vahriin/BigGraph/lib/algorithm"
 	"github.com/vahriin/BigGraph/lib/coordinates"
 	"github.com/vahriin/BigGraph/lib/csv"
 	"github.com/vahriin/BigGraph/lib/model"
@@ -31,7 +31,7 @@ func main() {
 	startPoint, destinationPoints, adjacencyList := getInput(destinationPointsChannel, oneStartPointChannel, oneAdjacencyListChannel)
 
 	// modify adjacency list
-	modifyAL(&adjacencyList, startPoint)
+	adjacencyList.AddPoint(startPoint)
 
 	// file-writer goroutines
 	outSVGChan, outCSVChan, wg := createInputChannel(test, 10000, len(destinationPoints))
@@ -81,12 +81,6 @@ func getInput(dpCh <-chan []uint64, spCh <-chan coordinates.GeneralCoords, alCh 
 	}
 	adjacencyList := <-alCh
 	return startPoint, destinationPoints, adjacencyList
-}
-
-func modifyAL(al *model.AdjList, sp coordinates.GeneralCoords) {
-	nearestPointID := algorithm.Search(al, sp)
-	al.Nodes[0] = sp
-	al.AdjacencyList[0] = []uint64{nearestPointID}
 }
 
 func createInputChannel(test bool, svgCap int, csvCap int) (chan svg.SVGWriter, chan csv.CSVWriter, *sync.WaitGroup) {
