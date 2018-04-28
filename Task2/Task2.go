@@ -21,20 +21,10 @@ func main() {
 
 	broden, test := pf()
 
-	oneStartPointChannel := make(chan coordinates.GeneralCoords)
-	destinationPointsChannel := make(chan []uint64, 10)
-	oneAdjacencyListChannel := make(chan model.AdjList)
-
-	input.ParallelInput(oneStartPointChannel, destinationPointsChannel, oneAdjacencyListChannel, "input/Task2/")
-
-	// getting of general variables
-	startPoint, destinationPoints, adjacencyList := getInput(destinationPointsChannel, oneStartPointChannel, oneAdjacencyListChannel)
-
-	// modify adjacency list
-	adjacencyList.AddPoint(startPoint)
+	adjacencyList, destinationPoints, startPoint := input.Input("input/Task2/")
 
 	// file-writer goroutines
-	outSVGChan, outCSVChan, wg := createInputChannel(test, 10000, len(destinationPoints))
+	outSVGChan, outCSVChan, wg := createOutChannel(test, 10000, len(destinationPoints))
 
 	// draw graph
 	var dgwg sync.WaitGroup
@@ -45,8 +35,8 @@ func main() {
 
 	// algorithms
 	if !broden {
-		//go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
-		go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
+		go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
+		//go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
 		//go algorithm.Astar(pathChan, destinationPoints, 0, adjacencyList)
 	} else {
 		pathChan <- output.BrodenPath()
@@ -59,7 +49,8 @@ func main() {
 
 	close(outCSVChan)
 
-	outSVGChan <- svg.Circle{Center: startPoint.Euclid, Color: "green", Radius: svg.PointAttentionRadius}
+	outSVGChan <- svg.Circle{Center: adjacencyList.Nodes[startPoint].Euclid,
+		Color: "green", Radius: svg.PointAttentionRadius}
 	close(outSVGChan)
 
 	wg.Wait()
@@ -83,7 +74,7 @@ func getInput(dpCh <-chan []uint64, spCh <-chan coordinates.GeneralCoords, alCh 
 	return startPoint, destinationPoints, adjacencyList
 }
 
-func createInputChannel(test bool, svgCap int, csvCap int) (chan svg.SVGWriter, chan csv.CSVWriter, *sync.WaitGroup) {
+func createOutChannel(test bool, svgCap int, csvCap int) (chan svg.SVGWriter, chan csv.CSVWriter, *sync.WaitGroup) {
 	var wg sync.WaitGroup
 	outMapChan := make(chan svg.SVGWriter, svgCap)
 	outCSVChan := make(chan csv.CSVWriter, csvCap)

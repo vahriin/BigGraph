@@ -14,22 +14,14 @@ type AdjList struct {
 }
 
 func NewAdjList(adjacencyList, nodesList string) AdjList {
-	alChan := make(chan map[uint64][]uint64)
-	nlChan := make(chan map[uint64]coordinates.GeneralCoords)
-
-	go csv.ReadNodeList(nlChan, nodesList)
-	go csv.ReadAdjacencyList(alChan, adjacencyList)
-
-	var al AdjList
-	al.AdjacencyList = <-alChan
-	al.Nodes = <-nlChan
-
-	return al
+	return AdjList{AdjacencyList: csv.ReadAdjacencyList(adjacencyList), Nodes: csv.ReadNodeList(nodesList)}
 }
 
 func (al AdjList) AddPoint(coords coordinates.GeneralCoords) {
 	pdChan := make(chan pointDist, 1000)
 
+	var pSync sync.WaitGroup
+	pSync.Add(1)
 	go func() {
 		minimal := pointDist{point: 0, dist: math.MaxFloat64}
 
@@ -42,16 +34,18 @@ func (al AdjList) AddPoint(coords coordinates.GeneralCoords) {
 		al.Nodes[0] = coords
 		al.AdjacencyList[0] = []uint64{minimal.point}
 		al.AdjacencyList[minimal.point] = append(al.AdjacencyList[minimal.point], 0)
+		pSync.Done()
 	}()
 
-	var wg sync.WaitGroup
+	var distSync sync.WaitGroup
 	for point, coord := range al.Nodes {
-		wg.Add(1)
+		distSync.Add(1)
 		go func(point uint64, coord coordinates.GeneralCoords) {
 			pdChan <- pointDist{point: point, dist: coordinates.Distance(coord.Euclid, coords.Euclid)}
-			wg.Done()
+			distSync.Done()
 		}(point, coord)
 	}
-	wg.Wait()
+	distSync.Wait()
 	close(pdChan)
+	pSync.Wait()
 }
