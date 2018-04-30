@@ -8,8 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/vahriin/BigGraph/lib/algorithm"
-
+	"github.com/vahriin/BigGraph/Task3/aco"
 	"github.com/vahriin/BigGraph/Task3/input"
 	"github.com/vahriin/BigGraph/Task3/output"
 	"github.com/vahriin/BigGraph/lib/csv"
@@ -37,7 +36,8 @@ func main() {
 
 	pathChan := make(chan model.Path, 10)
 
-	go algorithm.NearestVertexAdd(pathChan, travelPoints, 0, adjacencyList)
+	//go algorithm.NearestVertexAdd(pathChan, travelPoints, 0, adjacencyList)
+	go aco.AntColonyOptimization(pathChan, travelPoints, 0, adjacencyList)
 
 	dgwg.Wait()
 

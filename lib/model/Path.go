@@ -18,3 +18,13 @@ func (p Path) Coordinates(al AdjList) []coordinates.EuclidCoords {
 
 	return coords
 }
+
+func (p Path) Copy() Path {
+	cp := Path{
+		Points: make([]uint64, len(p.Points)),
+		Len:    p.Len,
+	}
+
+	copy(cp.Points, p.Points)
+	return cp
+}
