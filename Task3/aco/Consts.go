@@ -1,9 +1,10 @@
 package aco
 
 const (
-	alpha  = 0.7
-	beta   = 1 - alpha
-	phMult = 1
-	phVape = 0.5
-	phMin  = 0.0000001
+	ALPHA       = 0.7
+	BETA        = 1 - ALPHA
+	PH_MULT     = 1
+	PH_VAPE     = 0.4
+	ANTS_AMOUNT = 100
+	ITERATIONS  = 2000
 )

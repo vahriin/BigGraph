@@ -13,14 +13,14 @@ func AntColonyOptimization(out chan<- model.Path, points map[uint64]struct{}, st
 
 	pathMatrix := PreparePM(start, points, al)
 
-	ants := MakeAnts(&pathMatrix, start, 1000)
+	ants := MakeAnts(&pathMatrix, start, ANTS_AMOUNT)
 
 	bestPath := model.Path{
 		Points: make([]uint64, 0),
 		Len:    math.MaxFloat64,
 	}
 
-	iterations := 100
+	iterations := ITERATIONS
 
 	pathCh := make(chan model.Path, len(ants))
 	var wg sync.WaitGroup
@@ -80,7 +80,7 @@ func PreparePM(start uint64, travelPoints map[uint64]struct{}, al model.AdjList)
 
 			for path := range outCh {
 				pm.SetPath(path.Start(), path.End(), path)
-				pm.SetPheromone(path.Start(), path.End(), phMin)
+				pm.SetPheromone(path.Start(), path.End(), 1/float64(len(pm.cities)))
 			}
 			wg.Done()
 		}(start, localTravelPoints)
@@ -97,9 +97,9 @@ func VapePheromones(pm *PathMatrix) {
 				continue
 			}
 
-			newPheromone := pm.Pheromone(i, j) * (1 - phVape)
-			if newPheromone < phMin {
-				newPheromone = phMin
+			newPheromone := pm.Pheromone(i, j) * (1 - PH_VAPE)
+			if newPheromone < 1/float64(len(pm.cities)) {
+				newPheromone = 1 / float64(len(pm.cities))
 			}
 			pm.SetPheromone(i, j, newPheromone)
 		}

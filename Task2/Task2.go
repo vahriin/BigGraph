@@ -36,8 +36,8 @@ func main() {
 	// algorithms
 	if !broden {
 		//go algorithm.Dijkstra(pathChan, destinationPoints, 0, adjacencyList)
-		go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
-		//go algorithm.Astar(pathChan, destinationPoints, 0, adjacencyList)
+		//go algorithm.Levit(pathChan, destinationPoints, 0, adjacencyList)
+		go algorithm.Astar(pathChan, destinationPoints, 0, adjacencyList)
 	} else {
 		pathChan <- output.BrodenPath()
 		close(pathChan)

@@ -23,7 +23,7 @@ func NearestVertexAdd(out chan<- model.Path, points map[uint64]struct{}, start u
 			}
 		}()
 
-		start = shortestPath.Points[0]
+		start = shortestPath.End()
 		delete(points, start)
 
 		if len(points) == 0 && iterate {

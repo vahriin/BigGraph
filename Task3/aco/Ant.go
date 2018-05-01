@@ -46,7 +46,7 @@ func (ant *Ant) MakePath(pathCh chan<- model.Path, pm PathMatrix, wg *sync.WaitG
 
 	// update pheromones
 	for i := 1; i < len(ant.Path.Points); i++ {
-		pm.UpdatePheromone(ant.Path.Points[i-1], ant.Path.Points[i], phMult/ant.Path.Len)
+		pm.UpdatePheromone(ant.Path.Points[i-1], ant.Path.Points[i], PH_MULT/ant.Path.Len)
 	}
 
 	// set path to clear
@@ -72,8 +72,8 @@ func (ant *Ant) nextCity(pm PathMatrix) {
 			continue
 		}
 
-		denom += math.Pow(pm.Pheromone(ant.CurrentCity, city), alpha) *
-			math.Pow(pm.Distance(ant.CurrentCity, city), beta)
+		denom += math.Pow(pm.Pheromone(ant.CurrentCity, city), ALPHA) *
+			math.Pow(pm.Distance(ant.CurrentCity, city), BETA)
 	}
 
 	citiesOrder := make([]uint64, len(pm.cities)-len(ant.Taboo))
@@ -85,8 +85,8 @@ func (ant *Ant) nextCity(pm PathMatrix) {
 			continue
 		}
 
-		probabilitiesSum += math.Pow(pm.Pheromone(ant.CurrentCity, city), alpha) *
-			math.Pow(pm.Distance(ant.CurrentCity, city), beta) / denom
+		probabilitiesSum += math.Pow(pm.Pheromone(ant.CurrentCity, city), ALPHA) *
+			math.Pow(pm.Distance(ant.CurrentCity, city), BETA) / denom
 
 		citiesOrder[orderIndex] = city
 		probabilities[orderIndex] = probabilitiesSum
