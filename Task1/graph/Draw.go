@@ -7,7 +7,6 @@ import (
 	"github.com/vahriin/BigGraph/lib/svg"
 )
 
-// ProcessSVG draw the AdjList to .svg file TODO: outdated
 func ProcessSVG(svgChan chan<- svg.SVGWriter, wg *sync.WaitGroup, al types.AdjList) {
 	processed := make(map[uint64]struct{})
 
