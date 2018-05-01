@@ -85,7 +85,7 @@ func Levit(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 			}
 		}
 
-		if minimumID == 0 {
+		if math.Abs(minimum-math.MaxFloat64) < 1E-6 {
 			return
 		}
 

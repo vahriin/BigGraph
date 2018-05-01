@@ -3,6 +3,7 @@ package aco
 import (
 	"math"
 	"math/rand"
+	"sync"
 
 	"github.com/vahriin/BigGraph/lib/model"
 )
@@ -32,7 +33,7 @@ func MakeAnts(pm *PathMatrix, startCity uint64, antAmount int) []Ant {
 	return ants
 }
 
-func (ant *Ant) MakePath(pathCh chan<- model.Path, pm *PathMatrix) {
+func (ant *Ant) MakePath(pathCh chan<- model.Path, pm PathMatrix, wg *sync.WaitGroup) {
 	for len(ant.Taboo) != len(pm.cities) {
 		ant.nextCity(pm)
 	}
@@ -61,9 +62,10 @@ func (ant *Ant) MakePath(pathCh chan<- model.Path, pm *PathMatrix) {
 			delete(ant.Taboo, city)
 		}
 	}
+	wg.Done()
 }
 
-func (ant *Ant) nextCity(pm *PathMatrix) {
+func (ant *Ant) nextCity(pm PathMatrix) {
 	var denom float64
 	for city := range pm.cities {
 		if _, ok := ant.Taboo[city]; ok {
@@ -72,7 +74,6 @@ func (ant *Ant) nextCity(pm *PathMatrix) {
 
 		denom += math.Pow(pm.Pheromone(ant.CurrentCity, city), alpha) *
 			math.Pow(pm.Distance(ant.CurrentCity, city), beta)
-
 	}
 
 	citiesOrder := make([]uint64, len(pm.cities)-len(ant.Taboo))
