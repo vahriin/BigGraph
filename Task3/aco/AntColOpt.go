@@ -1,7 +1,6 @@
 package aco
 
 import (
-	"fmt"
 	"math"
 	"sync"
 
@@ -46,11 +45,7 @@ func AntColonyOptimization(out chan<- model.Path, points map[uint64]struct{}, st
 		wg.Wait()
 	}
 
-	fmt.Println(bestPath)
-	fmt.Println(pathMatrix.Path(0, 494779717))
-
 	for i := 1; i < len(bestPath.Points); i++ {
-		//fmt.Println(pathMatrix.Path(bestPath.Points[i-1], bestPath.Points[i]))
 		out <- pathMatrix.Path(bestPath.Points[i-1], bestPath.Points[i])
 	}
 
@@ -84,8 +79,8 @@ func PreparePM(start uint64, travelPoints map[uint64]struct{}, al model.AdjList)
 			algorithm.Levit(outCh, travelPoints, start, al)
 
 			for path := range outCh {
-				pm.SetPath(path.Points[len(path.Points)-1], path.Points[0], path)
-				pm.SetPheromone(path.Points[len(path.Points)-1], path.Points[0], phMin)
+				pm.SetPath(path.Start(), path.End(), path)
+				pm.SetPheromone(path.Start(), path.End(), phMin)
 			}
 			wg.Done()
 		}(start, localTravelPoints)
