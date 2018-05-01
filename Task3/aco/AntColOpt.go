@@ -47,6 +47,7 @@ func AntColonyOptimization(out chan<- model.Path, points map[uint64]struct{}, st
 	}
 
 	fmt.Println(bestPath)
+	fmt.Println(pathMatrix.Path(0, 494779717))
 
 	for i := 1; i < len(bestPath.Points); i++ {
 		//fmt.Println(pathMatrix.Path(bestPath.Points[i-1], bestPath.Points[i]))
@@ -83,8 +84,8 @@ func PreparePM(start uint64, travelPoints map[uint64]struct{}, al model.AdjList)
 			algorithm.Levit(outCh, travelPoints, start, al)
 
 			for path := range outCh {
-				pm.SetPath(start, path.Points[0], path)
-				pm.SetPheromone(start, path.Points[0], phMin)
+				pm.SetPath(path.Points[len(path.Points)-1], path.Points[0], path)
+				pm.SetPheromone(path.Points[len(path.Points)-1], path.Points[0], phMin)
 			}
 			wg.Done()
 		}(start, localTravelPoints)

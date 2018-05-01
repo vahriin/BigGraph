@@ -100,7 +100,11 @@ func (pm PathMatrix) Path(i, j uint64) model.Path {
 		return rp
 	}
 
-	iN, jN := pm.normalIndexes(i, j)
+	iN, jN, status := pm.normalIndexesStat(i, j)
+
+	if status {
+		return pm.pathways[iN][jN].Reverse()
+	}
 
 	return pm.pathways[iN][jN]
 }
@@ -113,9 +117,13 @@ func (pm *PathMatrix) SetPath(i, j uint64, path model.Path) {
 		return
 	}
 
-	iN, jN := pm.normalIndexes(i, j)
+	iN, jN, status := pm.normalIndexesStat(i, j)
 
-	pm.pathways[iN][jN] = path
+	if status {
+		pm.pathways[iN][jN] = path.Reverse()
+	} else {
+		pm.pathways[iN][jN] = path
+	}
 }
 
 func (pm PathMatrix) normalIndexes(i, j uint64) (iN, jN int) {
@@ -124,4 +132,13 @@ func (pm PathMatrix) normalIndexes(i, j uint64) (iN, jN int) {
 	}
 
 	return pm.cities[i], pm.cities[j] - pm.cities[i] - 1
+}
+
+func (pm PathMatrix) normalIndexesStat(i, j uint64) (iN, jN int, stat bool) {
+	if pm.cities[j] < pm.cities[i] {
+		i, j = j, i
+		stat = true
+	}
+
+	return pm.cities[i], pm.cities[j] - pm.cities[i] - 1, stat
 }

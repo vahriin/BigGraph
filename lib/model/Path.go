@@ -28,3 +28,16 @@ func (p Path) Copy() Path {
 	copy(cp.Points, p.Points)
 	return cp
 }
+
+func (p Path) Reverse() Path {
+	cp := Path{
+		Points: make([]uint64, len(p.Points)),
+		Len:    p.Len,
+	}
+
+	for i, id := range p.Points {
+		cp.Points[len(p.Points)-i-1] = id
+	}
+
+	return cp
+}
