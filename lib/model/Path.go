@@ -9,6 +9,14 @@ type Path struct {
 	Len    float64
 }
 
+func (p Path) Start() uint64 {
+	return p.Points[0]
+}
+
+func (p Path) End() uint64 {
+	return p.Points[len(p.Points)-1]
+}
+
 func (p Path) Coordinates(al AdjList) []coordinates.EuclidCoords {
 	coords := make([]coordinates.EuclidCoords, len(p.Points))
 
