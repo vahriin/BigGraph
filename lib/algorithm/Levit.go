@@ -99,7 +99,7 @@ func Levit(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 
 		path.Points = append(path.Points, tempID)
 
-		out <- path
+		out <- path.Reverse()
 		delete(endpoints, minimumID)
 	}
 

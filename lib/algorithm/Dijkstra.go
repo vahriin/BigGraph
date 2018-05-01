@@ -43,7 +43,7 @@ func Dijkstra(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64
 
 			path.Points = append(path.Points, tempID)
 
-			out <- path
+			out <- path.Reverse()
 
 			delete(endpoints, currentVertexID)
 

@@ -41,7 +41,7 @@ func Astar(out chan<- model.Path, endpoints map[uint64]struct{}, start uint64, a
 			return
 		}
 
-		out <- paths[minimumIndex]
+		out <- paths[minimumIndex].Reverse()
 
 		paths[minimumIndex].Len = math.MaxFloat64
 	}
